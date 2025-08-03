@@ -3,444 +3,571 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francisco Medina - Director Creativo</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <title>Francisco Medina - Creative Director & Copywriter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         .font-playfair { font-family: 'Playfair Display', serif; }
         .font-inter { font-family: 'Inter', sans-serif; }
-        .text-gradient { background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hidden { display: none; }
-        .fade-in { opacity: 0; animation: fadeIn 0.6s ease-in forwards; }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .section-spacing { padding: 4rem 0; }
-        @media (max-width: 768px) { .section-spacing { padding: 2rem 0; } }
+
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-fade {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .section-fade:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            transform: scale(1.02);
+        }
+
+        /* Language switching */
+        .english .lang-es { display: none; }
+        .english .lang-en { display: block; }
+        .lang-en { display: none; }
+        .lang-es { display: block; }
+
+        /* Loading animation for form submission */
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #374151;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        .loading .loading-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error message styles */
+        .message-box {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .message-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .message-box.show {
+            display: block;
+        }
     </style>
 </head>
-<body class="font-inter text-gray-800 bg-white">
-    <!-- Language Toggle -->
-    <div class="fixed top-6 right-6 z-50">
-        <button id="langToggle" class="bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-700 transition-colors">
-            <span id="langText">EN</span>
-        </button>
-    </div>
+<body class="font-inter text-gray-900 leading-relaxed">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="font-playfair text-2xl font-bold">FM</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#evolution" class="hover:text-gray-600 transition-colors">
+                    <span class="lang-es">Evolución</span>
+                    <span class="lang-en">Evolution</span>
+                </a>
+                <a href="#services" class="hover:text-gray-600 transition-colors">
+                    <span class="lang-es">Servicios</span>
+                    <span class="lang-en">Services</span>
+                </a>
+                <a href="#contact" class="hover:text-gray-600 transition-colors">
+                    <span class="lang-es">Contacto</span>
+                    <span class="lang-en">Contact</span>
+                </a>
+            </div>
+            <div class="flex space-x-2">
+                <button id="es-btn" class="px-3 py-1 text-sm border border-gray-300 rounded bg-gray-900 text-white" onclick="switchLanguage('es')">ES</button>
+                <button id="en-btn" class="px-3 py-1 text-sm border border-gray-300 rounded" onclick="switchLanguage('en')">EN</button>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Spanish Content -->
-    <div id="content-es" class="content-lang">
-        <!-- Hero Section -->
-        <section class="min-h-screen flex items-center justify-center px-6">
-            <div class="text-center max-w-4xl mx-auto">
-                <h1 class="font-playfair text-6xl md:text-8xl font-black text-gradient mb-6 fade-in">
-                    Francisco Medina
+    <!-- Hero Section -->
+    <header class="min-h-screen flex items-center px-6 pt-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="section-fade">
+                <h1 class="font-playfair font-bold text-6xl md:text-8xl mb-6">
+                    <span class="lang-es">FRANCISCO<br>MEDINA</span>
+                    <span class="lang-en">FRANCISCO<br>MEDINA</span>
                 </h1>
-                <p class="text-xl md:text-2xl text-gray-600 mb-8 fade-in" style="animation-delay: 0.2s;">
-                    Senior Copywriter - Director Creativo
+                <p class="text-2xl md:text-3xl text-gray-600 mb-8 font-light">
+                    <span class="lang-es">Creative Director & Copywriter</span>
+                    <span class="lang-en">Creative Director & Copywriter</span>
                 </p>
-                <p class="text-lg md:text-xl text-gray-500 font-light fade-in" style="animation-delay: 0.4s;">
-                    De redactor a director: Creatividad con visión estratégica
+                <p class="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
+                    <span class="lang-es">8+ años transformando palabras en resultados. De copy junior a director creativo, liderando equipos y proyectos que impactan.</span>
+                    <span class="lang-en">8+ years transforming words into results. From junior copywriter to creative director, leading teams and impactful projects.</span>
                 </p>
+                <a href="#contact" class="inline-block bg-gray-900 text-white px-8 py-4 text-lg hover:bg-gray-800 transition-colors hover-lift">
+                    <span class="lang-es">Hablemos de tu proyecto</span>
+                    <span class="lang-en">Let's talk about your project</span>
+                </a>
             </div>
-        </section>
+        </div>
+    </header>
 
-        <!-- Evolution Section -->
-        <section class="section-spacing px-6">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">La Evolución</h2>
-                
-                <div class="grid md:grid-cols-3 gap-12">
-                    <!-- Act 1 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">01</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">El Redactor</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2009-2012</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.
-                        </p>
-                    </div>
+    <!-- Evolution Section -->
+    <section id="evolution" class="py-20 px-6 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="section-fade">
+                <h2 class="font-playfair font-bold text-4xl md:text-5xl text-center mb-16">
+                    <span class="lang-es">MI EVOLUCIÓN</span>
+                    <span class="lang-en">MY EVOLUTION</span>
+                </h2>
 
-                    <!-- Act 2 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">02</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">El Estratega</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2013-2016</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.
-                        </p>
-                    </div>
-
-                    <!-- Act 3 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">03</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">El Director</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2016-presente</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section class="section-spacing px-6 bg-gray-50">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">Servicios</h2>
-                
-                <div class="grid md:grid-cols-3 gap-12">
-                    <!-- Service 1 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Dirección Creativa</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Desarrollo de conceptos que venden</li>
-                            <li>• Liderazgo de equipos creativos</li>
-                            <li>• Supervisión de campañas 360°</li>
-                        </ul>
-                    </div>
-
-                    <!-- Service 2 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Estrategia Digital</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Meta Ads strategy</li>
-                            <li>• Social media strategy</li>
-                            <li>• Performance creative</li>
-                        </ul>
-                    </div>
-
-                    <!-- Service 3 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Consultoría</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Auditorías creativas</li>
-                            <li>• Restructuración de equipos</li>
-                            <li>• Procesos creativos eficientes</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Cases Section -->
-        <section class="section-spacing px-6">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">Casos Destacados</h2>
-                
                 <div class="space-y-16">
-                    <!-- Case 1 -->
-                    <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">Cencosud Digital</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile
-                        </p>
+                    <!-- Phase 1: Foundation -->
+                    <div class="grid md:grid-cols-3 gap-8 items-center">
+                        <div class="md:col-span-1">
+                            <h3 class="font-playfair text-3xl font-bold mb-4">
+                                <span class="lang-es">FUNDACIÓN</span>
+                                <span class="lang-en">FOUNDATION</span>
+                            </h3>
+                            <p class="text-gray-600 text-lg">2016-2018</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-lg leading-relaxed">
+                                <span class="lang-es">Comencé escribiendo. Aprendí que las palabras pueden vender, emocionar y construir marcas. Mi formación en Escuela de Creativos Brother me dio las bases sólidas.</span>
+                                <span class="lang-en">I started writing. I learned that words can sell, emotion and build brands. My training at Brother Creative School gave me solid foundations.</span>
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Case 2 -->
-                    <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">Advertising Not Dead</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Resultado: 8+ años de liderazgo creativo exitoso
-                        </p>
+                    <!-- Phase 2: Growth -->
+                    <div class="grid md:grid-cols-3 gap-8 items-center">
+                        <div class="md:col-span-1">
+                            <h3 class="font-playfair text-3xl font-bold mb-4">
+                                <span class="lang-es">CRECIMIENTO</span>
+                                <span class="lang-en">GROWTH</span>
+                            </h3>
+                            <p class="text-gray-600 text-lg">2018-2021</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-lg leading-relaxed">
+                                <span class="lang-es">Expansion hacia estrategia creativa. Trabajé con marcas diversas, desde startups hasta corporaciones. Cada proyecto me enseñó algo nuevo sobre el poder de la comunicación estratégica.</span>
+                                <span class="lang-en">Expansion into creative strategy. I worked with diverse brands, from startups to corporations. Each project taught me something new about the power of strategic communication.</span>
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- Case 3 -->
-                    <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">SientoCuarenta</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Resultado: Proyecto creativo independiente exitoso 2012-2014
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="section-spacing px-6 bg-gray-900 text-white">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold mb-16">Conversemos</h2>
-                
-                <form id="contactForm" class="max-w-2xl mx-auto space-y-6">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <input type="text" id="name" name="name" placeholder="Nombre completo" required 
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
-                        <input type="email" id="email" name="email" placeholder="Email" required 
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
-                    </div>
-                    <input type="tel" id="phone" name="phone" placeholder="WhatsApp (opcional)" 
-                           class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
-                    <textarea id="message" name="message" rows="6" placeholder="Mensaje" required 
-                              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400"></textarea>
-                    <button type="submit" class="w-full bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        Enviar Mensaje
-                    </button>
-                </form>
-
-                <div id="successMessage" class="hidden mt-8 p-4 bg-green-600 rounded-lg">
-                    <p>¡Mensaje enviado correctamente! Te responderé pronto.</p>
-                </div>
-
-                <div id="errorMessage" class="hidden mt-8 p-4 bg-red-600 rounded-lg">
-                    <p>Error al enviar mensaje. Por favor intenta de nuevo.</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- English Content -->
-    <div id="content-en" class="content-lang hidden">
-        <!-- Hero Section -->
-        <section class="min-h-screen flex items-center justify-center px-6">
-            <div class="text-center max-w-4xl mx-auto">
-                <h1 class="font-playfair text-6xl md:text-8xl font-black text-gradient mb-6 fade-in">
-                    Francisco Medina
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-600 mb-8 fade-in" style="animation-delay: 0.2s;">
-                    Senior Copywriter - Creative Director
-                </p>
-                <p class="text-lg md:text-xl text-gray-500 font-light fade-in" style="animation-delay: 0.4s;">
-                    From copywriter to director: Creativity with strategic vision
-                </p>
-            </div>
-        </section>
-
-        <!-- Evolution Section -->
-        <section class="section-spacing px-6">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">The Evolution</h2>
-                
-                <div class="grid md:grid-cols-3 gap-12">
-                    <!-- Act 1 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">01</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">The Copywriter</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2009-2012</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.
-                        </p>
-                    </div>
-
-                    <!-- Act 2 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">02</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">The Strategist</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2013-2016</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.
-                        </p>
-                    </div>
-
-                    <!-- Act 3 -->
-                    <div class="text-center">
-                        <div class="text-6xl font-playfair font-black text-gray-300 mb-4">03</div>
-                        <h3 class="font-playfair text-2xl font-bold mb-4">The Director</h3>
-                        <p class="text-gray-600 mb-4 font-medium">2016-present</p>
-                        <p class="text-gray-700 leading-relaxed">
-                            Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.
-                        </p>
+                    <!-- Phase 3: Leadership -->
+                    <div class="grid md:grid-cols-3 gap-8 items-center">
+                        <div class="md:col-span-1">
+                            <h3 class="font-playfair text-3xl font-bold mb-4">
+                                <span class="lang-es">LIDERAZGO</span>
+                                <span class="lang-en">LEADERSHIP</span>
+                            </h3>
+                            <p class="text-gray-600 text-lg">2021-2024</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-lg leading-relaxed">
+                                <span class="lang-es">Evolución natural hacia la dirección creativa. Ahora lidero equipos, defino estrategias integrales y orquesto campañas que trascienden el simple copy.</span>
+                                <span class="lang-en">Natural evolution towards creative direction. Now I lead teams, define comprehensive strategies and orchestrate campaigns that transcend simple copy.</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Services Section -->
-        <section class="section-spacing px-6 bg-gray-50">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">Services</h2>
-                
-                <div class="grid md:grid-cols-3 gap-12">
-                    <!-- Service 1 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Creative Direction</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Development of concepts that sell</li>
-                            <li>• Creative team leadership</li>
-                            <li>• 360° campaign supervision</li>
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="section-fade">
+                <h2 class="font-playfair font-bold text-4xl md:text-5xl text-center mb-16">
+                    <span class="lang-es">LO QUE HAGO</span>
+                    <span class="lang-en">WHAT I DO</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <h3 class="font-playfair text-2xl font-bold">
+                            <span class="lang-es">Estrategia Creativa</span>
+                            <span class="lang-en">Creative Strategy</span>
+                        </h3>
+                        <ul class="space-y-4 text-lg">
+                            <li class="lang-es">• Definición de voice & tone</li>
+                            <li class="lang-es">• Arquitectura de contenidos</li>
+                            <li class="lang-es">• Estrategia de comunicación integral</li>
+                            <li class="lang-es">• Performance creative</li>
+                            <li class="lang-en">• Voice & tone definition</li>
+                            <li class="lang-en">• Content architecture</li>
+                            <li class="lang-en">• Integral communication strategy</li>
+                            <li class="lang-en">• Performance creative</li>
                         </ul>
                     </div>
 
-                    <!-- Service 2 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Digital Strategy</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Meta Ads strategy</li>
-                            <li>• Social media strategy</li>
-                            <li>• Performance creative</li>
-                        </ul>
-                    </div>
-
-                    <!-- Service 3 -->
-                    <div>
-                        <h3 class="font-playfair text-3xl font-bold mb-6">Consulting</h3>
-                        <ul class="space-y-3 text-gray-700">
-                            <li>• Creative audits</li>
-                            <li>• Team restructuring</li>
-                            <li>• Efficient creative processes</li>
+                    <div class="space-y-8">
+                        <h3 class="font-playfair text-2xl font-bold">
+                            <span class="lang-es">Dirección de Equipos</span>
+                            <span class="lang-en">Team Leadership</span>
+                        </h3>
+                        <ul class="space-y-4 text-lg">
+                            <li class="lang-es">• Liderazgo de equipos creativos</li>
+                            <li class="lang-es">• Mentoring de copywriters</li>
+                            <li class="lang-es">• Procesos creativos eficientes</li>
+                            <li class="lang-es">• Coordinación multidisciplinaria</li>
+                            <li class="lang-en">• Creative team leadership</li>
+                            <li class="lang-en">• Copywriter mentoring</li>
+                            <li class="lang-en">• Efficient creative processes</li>
+                            <li class="lang-en">• Multidisciplinary coordination</li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Cases Section -->
-        <section class="section-spacing px-6">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold text-center mb-16">Featured Cases</h2>
-                
+    <!-- Project Highlights -->
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="section-fade">
+                <h2 class="font-playfair font-bold text-4xl md:text-5xl text-center mb-16">
+                    <span class="lang-es">PROYECTOS DESTACADOS</span>
+                    <span class="lang-en">FEATURED PROJECTS</span>
+                </h2>
+
                 <div class="space-y-16">
-                    <!-- Case 1 -->
                     <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">Cencosud Digital</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Result: Successful digital campaigns for Chile's largest retail group
+                        <h3 class="font-playfair text-2xl font-bold mb-4">
+                            <span class="lang-es">Wispis (Libro + Revista)</span>
+                            <span class="lang-en">Wispis (Book + Magazine)</span>
+                        </h3>
+                        <p class="text-gray-600 mb-4">2020-2021</p>
+                        <p class="text-lg leading-relaxed">
+                            <span class="lang-es">Colectivo creativo que llevó el ingenio chileno de Twitter a formatos físicos: libro de tuits ilustrados y revista. Demostré capacidad emprendedora y visión de contenido.</span>
+                            <span class="lang-en">Creative collective that brought Chilean wit from Twitter to physical formats: illustrated tweets book and magazine. Demonstrated entrepreneurial capacity and content vision.</span>
                         </p>
                     </div>
 
-                    <!-- Case 2 -->
                     <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">Advertising Not Dead</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Result: 8+ years of successful creative leadership
-                        </p>
-                    </div>
-
-                    <!-- Case 3 -->
-                    <div class="border-l-4 border-gray-900 pl-8">
-                        <h3 class="font-playfair text-3xl font-bold mb-4">SientoCuarenta</h3>
-                        <p class="text-gray-700 mb-4 leading-relaxed">
-                            Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine.
-                        </p>
-                        <p class="text-gray-600 font-medium">
-                            Result: Successful independent creative project 2012-2014
+                        <h3 class="font-playfair text-2xl font-bold mb-4">
+                            <span class="lang-es">Dirección Creativa - Agencia</span>
+                            <span class="lang-en">Creative Direction - Agency</span>
+                        </h3>
+                        <p class="text-gray-600 mb-4">2022-2024</p>
+                        <p class="text-lg leading-relaxed">
+                            <span class="lang-es">Liderazgo de equipo creativo multidisciplinario. Desarrollo de estrategias integrales para marcas B2B y B2C. Enfoque en performance y results-driven creativity.</span>
+                            <span class="lang-en">Leadership of multidisciplinary creative team. Development of comprehensive strategies for B2B and B2C brands. Focus on performance and results-driven creativity.</span>
                         </p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Contact Section -->
-        <section class="section-spacing px-6 bg-gray-900 text-white">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="font-playfair text-5xl md:text-6xl font-bold mb-16">Let's Talk</h2>
-                
-                <form id="contactFormEn" class="max-w-2xl mx-auto space-y-6">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <input type="text" name="name" placeholder="Full name" required 
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
-                        <input type="email" name="email" placeholder="Email" required 
-                               class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <div class="section-fade">
+                <h2 class="font-playfair font-bold text-5xl md:text-6xl text-center mb-8">
+                    <span class="lang-es">HABLEMOS</span>
+                    <span class="lang-en">LET'S TALK</span>
+                </h2>
+
+                <p class="text-center text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+                    <span class="lang-es">¿Tienes un proyecto creativo en mente? ¿Necesitas liderar un equipo hacia mejores resultados? Conversemos.</span>
+                    <span class="lang-en">Do you have a creative project in mind? Need to lead a team towards better results? Let's talk.</span>
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div>
+                        <form id="contactForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="lang-es">Nombre *</span>
+                                    <span class="lang-en">Name *</span>
+                                </label>
+                                <input type="text" id="name" name="name" required 
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="lang-es">Correo *</span>
+                                    <span class="lang-en">Email *</span>
+                                </label>
+                                <input type="email" id="email" name="email" required 
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
+                                <input type="tel" id="whatsapp" name="whatsapp" 
+                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                                       placeholder="+56 9 XXXX XXXX">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="lang-es">Mensaje *</span>
+                                    <span class="lang-en">Message *</span>
+                                </label>
+                                <textarea id="message" name="message" rows="5" required 
+                                          class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                                          placeholder="Cuéntame sobre tu proyecto..."></textarea>
+                            </div>
+
+                            <button type="submit" id="submitBtn"
+                                    class="w-full bg-gray-900 text-white px-8 py-4 text-lg hover:bg-gray-800 transition-colors hover-lift flex items-center justify-center">
+                                <div class="loading-spinner"></div>
+                                <span id="submitText">
+                                    <span class="lang-es">Enviar Mensaje</span>
+                                    <span class="lang-en">Send Message</span>
+                                </span>
+                            </button>
+
+                            <!-- Message boxes -->
+                            <div id="successMessage" class="message-box message-success">
+                                <span class="lang-es">¡Mensaje enviado correctamente! Te contactaré muy pronto.</span>
+                                <span class="lang-en">Message sent successfully! I'll contact you very soon.</span>
+                            </div>
+                            <div id="errorMessage" class="message-box message-error">
+                                <span class="lang-es">Error al enviar mensaje. Por favor intenta de nuevo o contáctame directamente.</span>
+                                <span class="lang-en">Error sending message. Please try again or contact me directly.</span>
+                            </div>
+                        </form>
                     </div>
-                    <input type="tel" name="phone" placeholder="WhatsApp (optional)" 
-                           class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400">
-                    <textarea name="message" rows="6" placeholder="Message" required 
-                              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-white focus:border-transparent text-white placeholder-gray-400"></textarea>
-                    <button type="submit" class="w-full bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        Send Message
-                    </button>
-                </form>
 
-                <div id="successMessageEn" class="hidden mt-8 p-4 bg-green-600 rounded-lg">
-                    <p>Message sent successfully! I'll get back to you soon.</p>
-                </div>
+                    <!-- Contact Info -->
+                    <div class="flex flex-col justify-center">
+                        <div class="space-y-8">
+                            <div>
+                                <h3 class="font-playfair text-2xl font-bold mb-4">
+                                    <span class="lang-es">¿Por qué trabajar conmigo?</span>
+                                    <span class="lang-en">Why work with me?</span>
+                                </h3>
+                                <p class="text-lg leading-relaxed text-gray-600">
+                                    <span class="lang-es">Prefiero una conversación real. Te contactaré en menos de 24 horas para agendar una llamada de 30 minutos donde evaluamos cómo la creatividad estratégica puede impulsar tu negocio.</span>
+                                    <span class="lang-en">I prefer real conversation. I'll contact you within 24 hours to schedule a 30-minute call where we evaluate how strategic creativity can boost your business.</span>
+                                </p>
+                            </div>
 
-                <div id="errorMessageEn" class="hidden mt-8 p-4 bg-red-600 rounded-lg">
-                    <p>Error sending message. Please try again.</p>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-3">
+                                    <span class="lang-es">Mi enfoque:</span>
+                                    <span class="lang-en">My approach:</span>
+                                </h4>
+                                <ul class="space-y-2 text-gray-600">
+                                    <li class="lang-es">• Estrategia antes que ejecución</li>
+                                    <li class="lang-es">• ROI medible en cada proyecto</li>
+                                    <li class="lang-es">• Comunicación clara y constante</li>
+                                    <li class="lang-es">• Resultados que trascienden el brief</li>
+                                    <li class="lang-en">• Strategy before execution</li>
+                                    <li class="lang-en">• Measurable ROI in every project</li>
+                                    <li class="lang-en">• Clear and constant communication</li>
+                                    <li class="lang-en">• Results that transcend the brief</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="font-playfair text-3xl font-bold mb-4">FM</div>
+            <p class="text-gray-400">
+                <span class="lang-es">Francisco Medina - Creative Director & Copywriter</span>
+                <span class="lang-en">Francisco Medina - Creative Director & Copywriter</span>
+            </p>
+            <p class="text-gray-500 mt-2">
+                <span class="lang-es">Transformando palabras en resultados desde 2016</span>
+                <span class="lang-en">Transforming words into results since 2016</span>
+            </p>
+        </div>
+    </footer>
 
     <script>
-        // Initialize EmailJS
-        emailjs.init('e7E2jx0Et2ERIfQWT');
+        // EmailJS Configuration - REEMPLAZA CON TUS DATOS REALES
+        const EMAILJS_CONFIG = {
+            SERVICE_ID: 'service_o8jylbl',      // Tu Service ID de EmailJS
+            TEMPLATE_ID: 'template_74jwznp',    // Tu Template ID de EmailJS  
+            PUBLIC_KEY: 'VhzO0VEe0lD0hq6x8'     // Tu Public Key de EmailJS
+        };
 
-        // Language Toggle
-        let currentLang = 'es';
-        const langToggle = document.getElementById('langToggle');
-        const langText = document.getElementById('langText');
-        const contentEs = document.getElementById('content-es');
-        const contentEn = document.getElementById('content-en');
+        // Initialize EmailJS with your public key
+        emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
 
-        langToggle.addEventListener('click', () => {
-            if (currentLang === 'es') {
-                currentLang = 'en';
-                langText.textContent = 'ES';
-                contentEs.classList.add('hidden');
-                contentEn.classList.remove('hidden');
-                document.documentElement.lang = 'en';
+        // Language Switching
+        function switchLanguage(lang) {
+            const body = document.body;
+            const esBtn = document.getElementById('es-btn');
+            const enBtn = document.getElementById('en-btn');
+
+            if (lang === 'en') {
+                body.classList.add('english');
+                enBtn.classList.add('bg-gray-900', 'text-white');
+                esBtn.classList.remove('bg-gray-900', 'text-white');
+                localStorage.setItem('preferredLanguage', 'en');
             } else {
-                currentLang = 'es';
-                langText.textContent = 'EN';
-                contentEn.classList.add('hidden');
-                contentEs.classList.remove('hidden');
-                document.documentElement.lang = 'es';
+                body.classList.remove('english');
+                esBtn.classList.add('bg-gray-900', 'text-white');
+                enBtn.classList.remove('bg-gray-900', 'text-white');
+                localStorage.setItem('preferredLanguage', 'es');
+            }
+        }
+
+        // Load preferred language
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferredLanguage');
+            if (savedLang === 'en') {
+                switchLanguage('en');
             }
         });
 
-        // Contact Form Handler
-        function handleFormSubmit(formId, successId, errorId) {
-            const form = document.getElementById(formId);
-            const successMsg = document.getElementById(successId);
-            const errorMsg = document.getElementById(errorId);
+        // Enhanced Contact Form Handler with EmailJS
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const formData = new FormData(form);
-                const templateParams = {
-                    from_name: formData.get('name'),
-                    from_email: formData.get('email'),
-                    phone: formData.get('phone') || 'No proporcionado',
-                    message: formData.get('message'),
-                    to_email: 'francisco.medina@ejemplo.com'
-                };
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
 
-                emailjs.send('service_o8jylbl', 'template_74jwznp', templateParams)
-                    .then(() => {
-                        successMsg.classList.remove('hidden');
-                        errorMsg.classList.add('hidden');
-                        form.reset();
-                        setTimeout(() => {
-                            successMsg.classList.add('hidden');
-                        }, 5000);
-                    })
-                    .catch(() => {
-                        errorMsg.classList.remove('hidden');
-                        successMsg.classList.add('hidden');
-                        setTimeout(() => {
-                            errorMsg.classList.add('hidden');
-                        }, 5000);
-                    });
-            });
-        }
+            // Hide previous messages
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
 
-        // Initialize both forms
-        handleFormSubmit('contactForm', 'successMessage', 'errorMessage');
-        handleFormSubmit('contactFormEn', 'successMessageEn', 'errorMessageEn');
+            // Show loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
 
-        // Smooth scroll for any internal links
-        document.addEventListener('DOMContentLoaded', () => {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                }, index * 200);
+            // Get form data
+            const formData = {
+                from_name: document.getElementById('name').value,
+                from_email: document.getElementById('email').value,
+                phone: document.getElementById('whatsapp').value,
+                message: document.getElementById('message').value,
+                to_email: 'francisco@ejemplo.com' // REEMPLAZA CON TU EMAIL REAL
+            };
+
+            console.log('Enviando formulario con datos:', formData);
+            console.log('Configuración EmailJS:', EMAILJS_CONFIG);
+
+            // Send email using EmailJS
+            emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID,
+                formData,
+                EMAILJS_CONFIG.PUBLIC_KEY
+            )
+            .then(function(response) {
+                console.log('✅ EMAIL ENVIADO CORRECTAMENTE!', response.status, response.text);
+
+                // Show success message
+                successMessage.classList.add('show');
+
+                // Reset form
+                document.getElementById('contactForm').reset();
+
+                // Optional: Create WhatsApp link if phone provided
+                if (formData.phone) {
+                    const whatsappMessage = `¡Hola Francisco! Soy ${formData.from_name}. ${formData.message}`;
+                    const whatsappLink = `https://wa.me/${formData.phone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
+
+                    setTimeout(() => {
+                        if (confirm('¿También quieres contactar por WhatsApp?')) {
+                            window.open(whatsappLink, '_blank');
+                        }
+                    }, 2000);
+                }
+
+            }, function(error) {
+                console.error('❌ ERROR AL ENVIAR EMAIL:', error);
+
+                // Show error message
+                errorMessage.classList.add('show');
+
+                // Log detailed error information
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    text: error.text,
+                    status: error.status
+                });
+
+                // If it's a 412 error (authentication scopes), show specific message
+                if (error.text && error.text.includes('412')) {
+                    console.error('🔑 PROBLEMA DE AUTENTICACIÓN GMAIL - Revisa las instrucciones de configuración');
+                }
+            })
+            .finally(function() {
+                // Remove loading state
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
             });
         });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Console log for debugging
+        console.log('🚀 Francisco Medina Portfolio - EmailJS Version Loaded');
+        console.log('📧 EmailJS Config:', EMAILJS_CONFIG);
+        console.log('🔧 Para configurar EmailJS correctamente, sigue las instrucciones en el archivo gmail_authentication_fix_guide.md');
     </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"9697cc0b6debc366","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.7.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>
