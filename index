@@ -3,566 +3,695 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francisco Medina - Creative Director & Growth Strategist</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>Francisco Medina - Director Creativo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    
     <style>
         * {
-            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .font-playfair {
-            font-family: 'Playfair Display', serif;
+
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #666;
+            --accent-color: #2c2c2c;
+            --light-gray: #f8f8f8;
+            --white: #ffffff;
+            --transition: all 0.3s ease;
         }
-        
-        .font-inter {
+
+        body {
             font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background: var(--white);
+            overflow-x: hidden;
         }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
-        
-        .hover-lift {
-            transition: all 0.3s ease;
+
+        .section {
+            padding: 4rem 0;
+            position: relative;
         }
-        
-        .hover-lift:hover {
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: var(--transition);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--secondary-color);
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            border-radius: 20px;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .lang-btn:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-content .subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-content .tagline {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: var(--accent-color);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--white);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .evolution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .evolution-item {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .evolution-item:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        
-        .section-fade {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
+
+        .evolution-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            opacity: 0.3;
+            margin-bottom: 1rem;
         }
-        
-        .section-fade.visible {
-            opacity: 1;
-            transform: translateY(0);
+
+        .evolution-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
-        
-        .lang-es { display: block; }
-        .lang-en { display: none; }
-        
-        body.english .lang-es { display: none; }
-        body.english .lang-en { display: block; }
-        
-        .service-card {
-            border-left: 4px solid transparent;
-            transition: all 0.3s ease;
+
+        .evolution-period {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
-        
-        .service-card:hover {
-            border-left-color: #1f2937;
-            background-color: #f9fafb;
+
+        .evolution-desc {
+            color: var(--accent-color);
+            line-height: 1.6;
         }
-        
-        .form-input {
-            transition: all 0.3s ease;
+
+        /* Services Section */
+        .services {
+            background: var(--light-gray);
         }
-        
-        .form-input:focus {
-            transform: scale(1.02);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .service-item {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .service-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .service-list {
+            list-style: none;
+        }
+
+        .service-list li {
+            padding: 0.3rem 0;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .service-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Cases Section */
+        .cases {
+            background: var(--white);
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .case-item {
+            padding: 2rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .case-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .case-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .case-desc {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .case-result {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--light-gray);
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .submit-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Language specific content */
+        [data-lang="en"] {
+            display: none;
+        }
+
+        body.lang-en [data-lang="es"] {
+            display: none;
+        }
+
+        body.lang-en [data-lang="en"] {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .services-grid,
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success message */
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
         }
     </style>
 </head>
-<body class="font-inter bg-white text-gray-900">
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="font-playfair font-bold text-xl">
-                <span class="lang-es">Francisco Medina</span>
-                <span class="lang-en">Francisco Medina</span>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">Francisco Medina</div>
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="switchLanguage('es')">ES</button>
+                <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
             </div>
-            
-            <div class="flex items-center space-x-6">
-                <a href="#about" class="hover:text-gray-600 transition-colors">
-                    <span class="lang-es">Sobre Mí</span>
-                    <span class="lang-en">About</span>
-                </a>
-                <a href="#services" class="hover:text-gray-600 transition-colors">
-                    <span class="lang-es">Servicios</span>
-                    <span class="lang-en">Services</span>
-                </a>
-                <a href="#contact" class="hover:text-gray-600 transition-colors">
-                    <span class="lang-es">Contacto</span>
-                    <span class="lang-en">Contact</span>
-                </a>
-                
-                <!-- Language Switcher -->
-                <div class="flex items-center space-x-2 ml-6 border-l pl-6">
-                    <button onclick="switchLanguage('es')" class="lang-btn text-sm px-2 py-1 rounded transition-colors" id="es-btn">ES</button>
-                    <span class="text-gray-400">|</span>
-                    <button onclick="switchLanguage('en')" class="lang-btn text-sm px-2 py-1 rounded transition-colors" id="en-btn">EN</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center px-6 pt-20">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="mb-8">
-                <h1 class="font-playfair font-black text-6xl md:text-8xl leading-tight mb-6">
-                    <span class="lang-es">EL CREATIVO<br>QUE CRECIÓ</span>
-                    <span class="lang-en">THE CREATIVE<br>WHO GREW</span>
-                </h1>
-                
-                <div class="font-inter text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    <p class="lang-es">
-                        <strong>Francisco Medina</strong><br>
-                        De redactor publicitario a Director Creativo.<br>
-                        <em>8 años liderando equipos. Creatividad con visión estratégica.</em>
-                    </p>
-                    <p class="lang-en">
-                        <strong>Francisco Medina</strong><br>
-                        From copywriter to Creative Director.<br>
-                        <em>8 years leading teams. Creativity with strategic vision.</em>
-                    </p>
-                </div>
-            </div>
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-lang="es">Francisco Medina</h1>
+            <h1 data-lang="en">Francisco Medina</h1>
             
-            <div class="space-y-4">
-                <a href="#contact" class="inline-block bg-gray-900 text-white px-8 py-4 text-lg hover:bg-gray-800 transition-colors hover-lift">
-                    <span class="lang-es">Hablemos de tu Proyecto</span>
-                    <span class="lang-en">Let's Talk About Your Project</span>
-                </a>
-                
-                <div class="flex justify-center space-x-8 text-sm text-gray-500 mt-8">
-                    <div class="text-center">
-                        <div class="font-bold text-2xl text-gray-900">8+</div>
-                        <div class="lang-es">Años Liderando</div>
-                        <div class="lang-en">Years Leading</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="font-bold text-2xl text-gray-900">2K+</div>
-                        <div class="lang-es">Seguidores</div>
-                        <div class="lang-en">Followers</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="font-bold text-2xl text-gray-900">∞</div>
-                        <div class="lang-es">Ideas Ejecutadas</div>
-                        <div class="lang-en">Ideas Executed</div>
-                    </div>
-                </div>
-            </div>
+            <p class="subtitle" data-lang="es">Senior Copywriter - Director Creativo</p>
+            <p class="subtitle" data-lang="en">Senior Copywriter - Creative Director</p>
+            
+            <p class="tagline" data-lang="es">De redactor a director: Creatividad con visión estratégica</p>
+            <p class="tagline" data-lang="en">From copywriter to director: Creativity with strategic vision</p>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 px-6 bg-gray-50">
-        <div class="max-w-6xl mx-auto">
-            <div class="section-fade">
-                <h2 class="font-playfair font-bold text-5xl md:text-6xl text-center mb-16">
-                    <span class="lang-es">LA EVOLUCIÓN</span>
-                    <span class="lang-en">THE EVOLUTION</span>
-                </h2>
+    <section class="about section">
+        <div class="container">
+            <h2 class="section-title" data-lang="es">La Evolución</h2>
+            <h2 class="section-title" data-lang="en">The Evolution</h2>
+            
+            <div class="evolution-grid">
+                <div class="evolution-item">
+                    <div class="evolution-number">01</div>
+                    <h3 class="evolution-title" data-lang="es">El Redactor</h3>
+                    <h3 class="evolution-title" data-lang="en">The Copywriter</h3>
+                    <p class="evolution-period">2009-2012</p>
+                    <p class="evolution-desc" data-lang="es">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</p>
+                    <p class="evolution-desc" data-lang="en">I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.</p>
+                </div>
                 
-                <div class="grid md:grid-cols-3 gap-12">
-                    <!-- Act 1 -->
-                    <div class="text-center hover-lift">
-                        <div class="mb-6">
-                            <div class="font-playfair font-bold text-3xl text-gray-400 mb-2">01</div>
-                            <h3 class="font-playfair font-bold text-2xl">
-                                <span class="lang-es">EL REDACTOR</span>
-                                <span class="lang-en">THE COPYWRITER</span>
-                            </h3>
-                            <p class="text-gray-500 text-sm">
-                                <span class="lang-es">2009-2012</span>
-                                <span class="lang-en">2009-2012</span>
-                            </p>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            <span class="lang-es">Comencé escribiendo. Aprendí que las palabras pueden vender, emocionar y construir marcas. Mi formación en Escuela de Creativos Brother me dio las bases sólidas.</span>
-                            <span class="lang-en">I started writing. I learned that words can sell, move emotions, and build brands. My training at Escuela de Creativos Brother gave me solid foundations.</span>
-                        </p>
-                    </div>
-                    
-                    <!-- Act 2 -->
-                    <div class="text-center hover-lift">
-                        <div class="mb-6">
-                            <div class="font-playfair font-bold text-3xl text-gray-400 mb-2">02</div>
-                            <h3 class="font-playfair font-bold text-2xl">
-                                <span class="lang-es">EL ESTRATEGA</span>
-                                <span class="lang-en">THE STRATEGIST</span>
-                            </h3>
-                            <p class="text-gray-500 text-sm">
-                                <span class="lang-es">2013-2016</span>
-                                <span class="lang-en">2013-2016</span>
-                            </p>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            <span class="lang-es">Entendí el negocio detrás de la creatividad. Trabajé con marcas como Cencosud, aprendí digital, community management y cómo medir resultados reales.</span>
-                            <span class="lang-en">I understood the business behind creativity. I worked with brands like Cencosud, learned digital, community management, and how to measure real results.</span>
-                        </p>
-                    </div>
-                    
-                    <!-- Act 3 -->
-                    <div class="text-center hover-lift">
-                        <div class="mb-6">
-                            <div class="font-playfair font-bold text-3xl text-gray-400 mb-2">03</div>
-                            <h3 class="font-playfair font-bold text-2xl">
-                                <span class="lang-es">EL DIRECTOR</span>
-                                <span class="lang-en">THE DIRECTOR</span>
-                            </h3>
-                            <p class="text-gray-500 text-sm">
-                                <span class="lang-es">2016-presente</span>
-                                <span class="lang-en">2016-present</span>
-                            </p>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed">
-                            <span class="lang-es">Lidero equipos creativos en Advertising Not Dead. He aprendido que el mejor creativo es el que logra que su equipo brille y genere resultados medibles.</span>
-                            <span class="lang-en">I lead creative teams at Advertising Not Dead. I've learned that the best creative is one who makes their team shine and generates measurable results.</span>
-                        </p>
-                    </div>
+                <div class="evolution-item">
+                    <div class="evolution-number">02</div>
+                    <h3 class="evolution-title" data-lang="es">El Estratega</h3>
+                    <h3 class="evolution-title" data-lang="en">The Strategist</h3>
+                    <p class="evolution-period">2013-2016</p>
+                    <p class="evolution-desc" data-lang="es">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</p>
+                    <p class="evolution-desc" data-lang="en">Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.</p>
+                </div>
+                
+                <div class="evolution-item">
+                    <div class="evolution-number">03</div>
+                    <h3 class="evolution-title" data-lang="es">El Director</h3>
+                    <h3 class="evolution-title" data-lang="en">The Director</h3>
+                    <p class="evolution-period">2016-presente</p>
+                    <p class="evolution-desc" data-lang="es">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</p>
+                    <p class="evolution-desc" data-lang="en">Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Services Section -->
-    <section id="services" class="py-20 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="section-fade">
-                <h2 class="font-playfair font-bold text-5xl md:text-6xl text-center mb-16">
-                    <span class="lang-es">CREATIVIDAD ESTRATÉGICA</span>
-                    <span class="lang-en">STRATEGIC CREATIVITY</span>
-                </h2>
+    <section class="services section">
+        <div class="container">
+            <h2 class="section-title" data-lang="es">Servicios</h2>
+            <h2 class="section-title" data-lang="en">Services</h2>
+            
+            <div class="services-grid">
+                <div class="service-item">
+                    <h3 class="service-title" data-lang="es">Dirección Creativa</h3>
+                    <h3 class="service-title" data-lang="en">Creative Direction</h3>
+                    <ul class="service-list">
+                        <li data-lang="es">Desarrollo de conceptos que venden</li>
+                        <li data-lang="en">Development of concepts that sell</li>
+                        <li data-lang="es">Liderazgo de equipos creativos</li>
+                        <li data-lang="en">Creative team leadership</li>
+                        <li data-lang="es">Supervisión de campañas 360°</li>
+                        <li data-lang="en">360° campaign supervision</li>
+                    </ul>
+                </div>
                 
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Service 1 -->
-                    <div class="service-card p-8 rounded-lg">
-                        <div class="mb-6">
-                            <i class="fas fa-lightbulb text-3xl text-gray-700 mb-4"></i>
-                            <h3 class="font-playfair font-bold text-2xl mb-4">
-                                <span class="lang-es">DIRECCIÓN CREATIVA</span>
-                                <span class="lang-en">CREATIVE DIRECTION</span>
-                            </h3>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="lang-es">• Desarrollo de conceptos que venden</li>
-                            <li class="lang-es">• Liderazgo de equipos creativos</li>
-                            <li class="lang-es">• Supervisión de campañas 360°</li>
-                            
-                            <li class="lang-en">• Development of concepts that sell</li>
-                            <li class="lang-en">• Creative team leadership</li>
-                            <li class="lang-en">• 360° campaign supervision</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Service 2 -->
-                    <div class="service-card p-8 rounded-lg">
-                        <div class="mb-6">
-                            <i class="fas fa-chart-line text-3xl text-gray-700 mb-4"></i>
-                            <h3 class="font-playfair font-bold text-2xl mb-4">
-                                <span class="lang-es">ESTRATEGIA DIGITAL</span>
-                                <span class="lang-en">DIGITAL STRATEGY</span>
-                            </h3>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="lang-es">• Meta Ads strategy</li>
-                            <li class="lang-es">• Social media strategy</li>
-                            <li class="lang-es">• Performance creative</li>
-                            
-                            <li class="lang-en">• Meta Ads strategy</li>
-                            <li class="lang-en">• Social media strategy</li>
-                            <li class="lang-en">• Performance creative</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Service 3 -->
-                    <div class="service-card p-8 rounded-lg">
-                        <div class="mb-6">
-                            <i class="fas fa-rocket text-3xl text-gray-700 mb-4"></i>
-                            <h3 class="font-playfair font-bold text-2xl mb-4">
-                                <span class="lang-es">CONSULTORÍA</span>
-                                <span class="lang-en">CONSULTING</span>
-                            </h3>
-                        </div>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="lang-es">• Auditorías creativas</li>
-                            <li class="lang-es">• Restructuración de equipos</li>
-                            <li class="lang-es">• Procesos creativos eficientes</li>
-                            
-                            <li class="lang-en">• Creative audits</li>
-                            <li class="lang-en">• Team restructuring</li>
-                            <li class="lang-en">• Efficient creative processes</li>
-                        </ul>
-                    </div>
+                <div class="service-item">
+                    <h3 class="service-title" data-lang="es">Estrategia Digital</h3>
+                    <h3 class="service-title" data-lang="en">Digital Strategy</h3>
+                    <ul class="service-list">
+                        <li data-lang="es">Meta Ads strategy</li>
+                        <li data-lang="en">Meta Ads strategy</li>
+                        <li data-lang="es">Social media strategy</li>
+                        <li data-lang="en">Social media strategy</li>
+                        <li data-lang="es">Performance creative</li>
+                        <li data-lang="en">Performance creative</li>
+                    </ul>
+                </div>
+                
+                <div class="service-item">
+                    <h3 class="service-title" data-lang="es">Consultoría</h3>
+                    <h3 class="service-title" data-lang="en">Consulting</h3>
+                    <ul class="service-list">
+                        <li data-lang="es">Auditorías creativas</li>
+                        <li data-lang="en">Creative audits</li>
+                        <li data-lang="es">Restructuración de equipos</li>
+                        <li data-lang="en">Team restructuring</li>
+                        <li data-lang="es">Procesos creativos eficientes</li>
+                        <li data-lang="en">Efficient creative processes</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Case Studies Section -->
-    <section class="py-20 px-6 bg-gray-50">
-        <div class="max-w-6xl mx-auto">
-            <div class="section-fade">
-                <h2 class="font-playfair font-bold text-5xl md:text-6xl text-center mb-16">
-                    <span class="lang-es">CASOS DESTACADOS</span>
-                    <span class="lang-en">FEATURED CASES</span>
-                </h2>
+    <!-- Cases Section -->
+    <section class="cases section">
+        <div class="container">
+            <h2 class="section-title" data-lang="es">Casos Destacados</h2>
+            <h2 class="section-title" data-lang="en">Featured Cases</h2>
+            
+            <div class="cases-grid">
+                <div class="case-item">
+                    <h3 class="case-title" data-lang="es">Cencosud Digital</h3>
+                    <h3 class="case-title" data-lang="en">Cencosud Digital</h3>
+                    <p class="case-desc" data-lang="es">Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplían objetivos comerciales de manera creativa.</p>
+                    <p class="case-desc" data-lang="en">Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively.</p>
+                    <p class="case-result" data-lang="es">Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile</p>
+                    <p class="case-result" data-lang="en">Result: Successful digital campaigns for Chile's largest retail group</p>
+                </div>
                 
-                <div class="grid md:grid-cols-2 gap-12">
-                    <!-- Case 1 -->
-                    <div class="hover-lift">
-                        <div class="bg-white p-8 rounded-lg shadow-lg">
-                            <h3 class="font-playfair font-bold text-2xl mb-4">
-                                <span class="lang-es">Cencosud: Creatividad Digital</span>
-                                <span class="lang-en">Cencosud: Digital Creativity</span>
-                            </h3>
-                            <p class="text-gray-700 mb-6 leading-relaxed">
-                                <span class="lang-es">Lideré el equipo creativo digital para Jumbo, Santa Isabel y Retail Financiero. Desarrollamos campañas que combinaron creatividad con resultados comerciales medibles.</span>
-                                <span class="lang-en">I led the digital creative team for Jumbo, Santa Isabel, and Retail Financiero. We developed campaigns that combined creativity with measurable commercial results.</span>
-                            </p>
-                            <div class="flex space-x-4 text-sm text-gray-500">
-                                <span class="lang-es">• Liderazgo de equipo</span>
-                                <span class="lang-es">• Campañas 360°</span>
-                                <span class="lang-es">• ROI medible</span>
-                                
-                                <span class="lang-en">• Team leadership</span>
-                                <span class="lang-en">• 360° campaigns</span>
-                                <span class="lang-en">• Measurable ROI</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Case 2 -->
-                    <div class="hover-lift">
-                        <div class="bg-white p-8 rounded-lg shadow-lg">
-                            <h3 class="font-playfair font-bold text-2xl mb-4">
-                                <span class="lang-es">SientoCuarenta: Proyecto Creativo</span>
-                                <span class="lang-en">SientoCuarenta: Creative Project</span>
-                            </h3>
-                            <p class="text-gray-700 mb-6 leading-relaxed">
-                                <span class="lang-es">Colectivo creativo que llevó el ingenio chileno de Twitter a formatos físicos: libro de tuits ilustrados y revista. Demostré capacidad emprendedora y visión de contenido.</span>
-                                <span class="lang-en">Creative collective that brought Chilean wit from Twitter to physical formats: illustrated tweets book and magazine. Demonstrated entrepreneurial capacity and content vision.</span>
-                            </p>
-                            <div class="flex space-x-4 text-sm text-gray-500">
-                                <span class="lang-es">• Iniciativa propia</span>
-                                <span class="lang-es">• Gestión de contenido</span>
-                                <span class="lang-es">• Visión editorial</span>
-                                
-                                <span class="lang-en">• Own initiative</span>
-                                <span class="lang-en">• Content management</span>
-                                <span class="lang-en">• Editorial vision</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="case-item">
+                    <h3 class="case-title" data-lang="es">Advertising Not Dead</h3>
+                    <h3 class="case-title" data-lang="en">Advertising Not Dead</h3>
+                    <p class="case-desc" data-lang="es">Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.</p>
+                    <p class="case-desc" data-lang="en">As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity.</p>
+                    <p class="case-result" data-lang="es">Resultado: 8+ años de liderazgo creativo exitoso</p>
+                    <p class="case-result" data-lang="en">Result: 8+ years of successful creative leadership</p>
+                </div>
+                
+                <div class="case-item">
+                    <h3 class="case-title" data-lang="es">SientoCuarenta</h3>
+                    <h3 class="case-title" data-lang="en">SientoCuarenta</h3>
+                    <p class="case-desc" data-lang="es">Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.</p>
+                    <p class="case-desc" data-lang="en">Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine.</p>
+                    <p class="case-result" data-lang="es">Resultado: Proyecto creativo independiente exitoso 2012-2014</p>
+                    <p class="case-result" data-lang="en">Result: Successful independent creative project 2012-2014</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="section-fade">
-                <h2 class="font-playfair font-bold text-5xl md:text-6xl text-center mb-8">
-                    <span class="lang-es">HABLEMOS</span>
-                    <span class="lang-en">LET'S TALK</span>
-                </h2>
+    <section class="contact section">
+        <div class="container">
+            <h2 class="section-title" data-lang="es">Conversemos</h2>
+            <h2 class="section-title" data-lang="en">Let's Talk</h2>
+            
+            <div class="contact-content">
+                <div class="success-message" id="successMessage">
+                    <span data-lang="es">¡Mensaje enviado correctamente! Te responderé pronto.</span>
+                    <span data-lang="en">Message sent successfully! I'll get back to you soon.</span>
+                </div>
                 
-                <p class="text-center text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-                    <span class="lang-es">¿Tienes un proyecto creativo en mente? ¿Necesitas liderar un equipo hacia mejores resultados? Conversemos.</span>
-                    <span class="lang-en">Do you have a creative project in mind? Need to lead a team towards better results? Let's talk.</span>
-                </p>
+                <div class="error-message" id="errorMessage">
+                    <span data-lang="es">Error al enviar mensaje. Por favor intenta de nuevo.</span>
+                    <span data-lang="en">Error sending message. Please try again.</span>
+                </div>
                 
-                <div class="grid md:grid-cols-2 gap-12">
-                    <!-- Contact Form -->
-                    <div>
-                        <form id="contactForm" class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span class="lang-es">Nombre *</span>
-                                    <span class="lang-en">Name *</span>
-                                </label>
-                                <input type="text" id="name" name="name" required 
-                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span class="lang-es">Correo *</span>
-                                    <span class="lang-en">Email *</span>
-                                </label>
-                                <input type="email" id="email" name="email" required 
-                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">WhatsApp</label>
-                                <input type="tel" id="whatsapp" name="whatsapp" 
-                                       class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                       placeholder="+56 9 XXXX XXXX">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span class="lang-es">Mensaje *</span>
-                                    <span class="lang-en">Message *</span>
-                                </label>
-                                <textarea id="message" name="message" rows="5" required 
-                                          class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                                          placeholder="Cuéntame sobre tu proyecto..."></textarea>
-                            </div>
-                            
-                            <button type="submit" 
-                                    class="w-full bg-gray-900 text-white px-8 py-4 text-lg hover:bg-gray-800 transition-colors hover-lift">
-                                <span class="lang-es">Enviar Mensaje</span>
-                                <span class="lang-en">Send Message</span>
-                            </button>
-                        </form>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label data-lang="es">Nombre completo</label>
+                        <label data-lang="en">Full name</label>
+                        <input type="text" id="name" required>
                     </div>
                     
-                    <!-- Contact Info -->
-                    <div class="flex flex-col justify-center">
-                        <div class="space-y-8">
-                            <div>
-                                <h3 class="font-playfair font-bold text-2xl mb-4">
-                                    <span class="lang-es">Conversación Directa</span>
-                                    <span class="lang-en">Direct Conversation</span>
-                                </h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    <span class="lang-es">Prefiero una conversación real. Te contactaré en menos de 24 horas para agendar una llamada de 30 minutos donde evaluamos cómo la creatividad estratégica puede impulsar tu negocio.</span>
-                                    <span class="lang-en">I prefer real conversation. I'll contact you within 24 hours to schedule a 30-minute call where we evaluate how strategic creativity can boost your business.</span>
-                                </p>
-                            </div>
-                            
-                            <div>
-                                <h4 class="font-bold text-lg mb-2">
-                                    <span class="lang-es">Conectemos en LinkedIn</span>
-                                    <span class="lang-en">Let's Connect on LinkedIn</span>
-                                </h4>
-                                <a href="https://www.linkedin.com/in/fjmedina/" target="_blank" 
-                                   class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                                    <i class="fab fa-linkedin mr-2"></i>
-                                    /in/fjmedina
-                                </a>
-                            </div>
-                            
-                            <div class="pt-6 border-t border-gray-200">
-                                <p class="text-sm text-gray-500">
-                                    <span class="lang-es">📍 Santiago, Chile<br>🌎 Trabajo con clientes globalmente<br>💬 Español • English</span>
-                                    <span class="lang-en">📍 Santiago, Chile<br>🌎 Working with clients globally<br>💬 Español • English</span>
-                                </p>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" required>
                     </div>
+                    
+                    <div class="form-group">
+                        <label>WhatsApp</label>
+                        <input type="tel" id="phone" placeholder="+56 9 XXXX XXXX">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-lang="es">Mensaje</label>
+                        <label data-lang="en">Message</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span data-lang="es">Enviar mensaje</span>
+                        <span data-lang="en">Send message</span>
+                    </button>
+                </form>
+                
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/fjmedina/" target="_blank" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="mailto:contacto@franciscomedina.com" class="social-link">
+                        <i class="fas fa-envelope"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-6 bg-gray-900 text-white">
-        <div class="max-w-6xl mx-auto text-center">
-            <div class="font-playfair font-bold text-2xl mb-4">Francisco Medina</div>
-            <p class="text-gray-400 mb-6">
-                <span class="lang-es">Director Creativo • Estratega de Crecimiento • Líder de Equipos</span>
-                <span class="lang-en">Creative Director • Growth Strategist • Team Leader</span>
-            </p>
-            <div class="flex justify-center space-x-6">
-                <a href="https://www.linkedin.com/in/fjmedina/" target="_blank" 
-                   class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-linkedin text-xl"></i>
-                </a>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-800 text-sm text-gray-500">
-                <span class="lang-es">© 2024 Francisco Medina. El creativo que creció.</span>
-                <span class="lang-en">© 2024 Francisco Medina. The creative who grew.</span>
-            </div>
+    <footer class="footer">
+        <div class="container">
+            <p data-lang="es">&copy; 2024 Francisco Medina. Todos los derechos reservados.</p>
+            <p data-lang="en">&copy; 2024 Francisco Medina. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Language Switching
+        // Initialize EmailJS
+        (function() {
+            emailjs.init("e7E2jx0Et2ERIfQWT");
+        })();
+
+        // Language switching
         function switchLanguage(lang) {
-            const body = document.body;
-            const esBtn = document.getElementById('es-btn');
-            const enBtn = document.getElementById('en-btn');
+            document.body.className = lang === 'en' ? 'lang-en' : '';
             
-            if (lang === 'en') {
-                body.classList.add('english');
-                enBtn.classList.add('bg-gray-900', 'text-white');
-                esBtn.classList.remove('bg-gray-900', 'text-white');
-                localStorage.setItem('preferredLanguage', 'en');
-            } else {
-                body.classList.remove('english');
-                esBtn.classList.add('bg-gray-900', 'text-white');
-                enBtn.classList.remove('bg-gray-900', 'text-white');
-                localStorage.setItem('preferredLanguage', 'es');
-            }
-        }
-        
-        // Load preferred language
-        document.addEventListener('DOMContentLoaded', function() {
-            const preferredLang = localStorage.getItem('preferredLanguage') || 'es';
-            switchLanguage(preferredLang);
-            
-            // Animate sections on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-            
-            document.querySelectorAll('.section-fade').forEach(section => {
-                observer.observe(section);
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
-        });
-        
-        // Contact Form Handler
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            event.target.classList.add('active');
             
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const whatsapp = document.getElementById('whatsapp').value;
-            const message = document.getElementById('message').value;
-            
-            // Create mailto link
-            const subject = `Consulta de ${name}`;
-            const body = `Nombre: ${name}%0D%0AEmail: ${email}%0D%0AWhatsApp: ${whatsapp}%0D%0A%0D%0AMensaje:%0D%0A${message}`;
-            const mailtoLink = `mailto:francisco@ejemplo.com?subject=${subject}&body=${body}`;
-            
-            // Create WhatsApp link if number provided
-            if (whatsapp) {
-                const whatsappMessage = `Hola Francisco! Soy ${name}. ${message}`;
-                const whatsappLink = `https://wa.me/${whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMessage)}`;
-                
-                // Show options to user
-                if (confirm('¿Prefieres contactar por WhatsApp o Email?')) {
-                    window.open(whatsappLink, '_blank');
-                } else {
-                    window.location.href = mailtoLink;
-                }
-            } else {
-                window.location.href = mailtoLink;
-            }
-            
-            // Reset form
-            this.reset();
-            alert('¡Gracias! Te contactaré muy pronto.');
-        });
-        
-        // Smooth scrolling for navigation links
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -575,15 +704,122 @@
                 }
             });
         });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>' + 
+                (document.body.classList.contains('lang-en') ? 'Sending...' : 'Enviando...');
+            
+            // Get form data
+            const formData = {
+                from_name: document.getElementById('name').value,
+                from_email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                message: document.getElementById('message').value,
+                to_email: 'francisco@example.com' // Replace with your actual email
+            };
+            
+            // Send email
+            emailjs.send('service_o8jylbl', 'template_74jwznp', formData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    successMessage.style.display = 'block';
+                    document.getElementById('contactForm').reset();
+                    
+                    // Optional: Redirect to WhatsApp if phone is provided
+                    if (formData.phone) {
+                        setTimeout(() => {
+                            const whatsappMessage = encodeURIComponent(
+                                `Hola Francisco, te contacté desde tu web. Mi mensaje: ${formData.message}`
+                            );
+                            const whatsappURL = `https://wa.me/${formData.phone.replace(/\D/g, '')}?text=${whatsappMessage}`;
+                            if (confirm(document.body.classList.contains('lang-en') ? 
+                                'Would you like to continue the conversation on WhatsApp?' :
+                                '¿Te gustaría continuar la conversación por WhatsApp?')) {
+                                window.open(whatsappURL, '_blank');
+                            }
+                        }, 2000);
+                    }
+                })
+                .catch(function(error) {
+                    console.log('FAILED...', error);
+                    errorMessage.style.display = 'block';
+                })
+                .finally(function() {
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = document.body.classList.contains('lang-en') ? 
+                        'Send message' : 'Enviar mensaje';
+                });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Initialize hero animation
+        window.addEventListener('load', function() {
+            const heroContent = document.querySelector('.hero-content');
+            heroContent.style.opacity = '0';
+            heroContent.style.transform = 'translateY(30px)';
+            heroContent.style.transition = 'opacity 1s ease, transform 1s ease';
+            
+            setTimeout(() => {
+                heroContent.style.opacity = '1';
+                heroContent.style.transform = 'translateY(0)';
+            }, 500);
+        });
     </script>
 </body>
 </html>
     <script id="html_badge_script1">
         window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
-            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDqB8M2UEnFjWHv2o%2BZpAEJAPmn5a4kcSGpCXwIub5ixlI%2BS1xyxbOGfrhxUINA%2Fp2PzACwO1s10epT23yK99%2BXVeSXi7pFG09qfZ7RVEAylfQaRuGqYSWpNW0ATYaZMD1mcuA79OUT7LFRRok0B5gYZO3TiNRoVvFVqclIfkpzdhsB9KQfPaXtvunyaG3HvpcmOY2QqlCamWjVt0GGYdmpzRWfA7jVKIXYWsZiu%2B5zyZIgsJJN0brS2qA0htQTXaISmicLakAz6MBBwkBLcj4h77qdtp1CkfqDvGibWxv9HIjfbML84g5UtKL8MyGXP3%2Fl7i4K98xjlkuWD64OSRheN8jREdX2CM0fIZCb4gxDfdz%2FJJwn1F16cGAkYpzXVYyd%2Bq7SrOyp4j2nrmgGoeDkIMonDThzcXDh%2BzixdvZsOxqDWeYWH0JOYcF6DVGzq%2BrONX3qtNyuxpkbpuWC3YjnZ0OwFE8gSDsQXWKomn%2FZ9WzEN%2Fw2xEFPLyPdsiR56S%2Bdx482STlA5opinK6%2BJ3CNc%3D";
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDoA9txbGyrmpKhK7I2g9SG4Ifx6EPGsJoEihbhL2KRvtsvLk4ZrAAfB1jNUAk%2FybD%2BWFBlT%2BMPu1%2B14DNkGsCzib6wY3qlFW9zpGUV%2FQuBRCGMnbGGlHEWFd3jkBl0WvAE9mG7KSh9DctvFCyiX9aeo8GeWGU93%2BbS9M2Tnids7tiT2hzdLHRqnWqWB9dKkRx%2BasWVUYVJCvAg2KPwIGL2qGa06Z%2FqQSJs9vMxabxabIZtXebnxo5X2RljQ4W3m3yZOkWNZeIrWQUFcPrlcL3W3YGPtu0GEXBNoGuGy0Nm3g8u6weNK7Emc%2ByxzRXKiWCYNnMCjaam1GsRd80YboFwNC%2B11MlFnWSfFHyqRgdDajZ3ltwZfz5vdAAbAJyehwZ40Uhadf2pGvRnK0MROS9zp1xOXjqGGhDKUgszyRs1rIYZTJSh9eGZV8nqvNUwdJ0BRs564U5eZrfAVAiLTBFrPrGByxh4cT%2Ftj5ALTr9RqmZlmwKA3685q5R2lv3PSVUZ8ESOXQEk9XFDq1z3GRD6U%3D";
         window.__genspark_locale = "es-ES";
-        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDqB8M2UEnFjWHv2o+ZpAEJAPmn5a4kcSGpCXwIub5ixlI+S1xyxbOGfrhxUINA/p2PzACwO1s10epT23yK99+XVeSXi7pFG09qfZ7RVEAylfQaRuGqYSWpNW0ATYaZMD1mcuA79OUT7LFRRok0B5gYZO3TiNRoVvFVqclIfkpzdhsB9KQfPaXtvunyaG3HvpcmOY2QqlCamWjVt0GGYdmpzRWfA7jVKIXYWsZiu+5zyZIgsJJN0brS2qA0htQTXaISmicLakAz6MBBwkBLcj4h77qdtp1CkfqDvGibWxv9HIjfbML84g5UtKL8MyGXP3/l7i4K98xjlkuWD64OSRheN8jREdX2CM0fIZCb4gxDfdz/JJwn1F16cGAkYpzXVYyd+q7SrOyp4j2nrmgGoeDkIMonDThzcXDh+zixdvZsOxqDWeYWH0JOYcF6DVGzq+rONX3qtNyuxpkbpuWC3YjnZ0OwFE8gSDsQXWKomn/Z9WzEN/w2xEFPLyPdsiR56S+dx482STlA5opinK6+J3CNc=";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDoA9txbGyrmpKhK7I2g9SG4Ifx6EPGsJoEihbhL2KRvtsvLk4ZrAAfB1jNUAk/ybD+WFBlT+MPu1+14DNkGsCzib6wY3qlFW9zpGUV/QuBRCGMnbGGlHEWFd3jkBl0WvAE9mG7KSh9DctvFCyiX9aeo8GeWGU93+bS9M2Tnids7tiT2hzdLHRqnWqWB9dKkRx+asWVUYVJCvAg2KPwIGL2qGa06Z/qQSJs9vMxabxabIZtXebnxo5X2RljQ4W3m3yZOkWNZeIrWQUFcPrlcL3W3YGPtu0GEXBNoGuGy0Nm3g8u6weNK7Emc+yxzRXKiWCYNnMCjaam1GsRd80YboFwNC+11MlFnWSfFHyqRgdDajZ3ltwZfz5vdAAbAJyehwZ40Uhadf2pGvRnK0MROS9zp1xOXjqGGhDKUgszyRs1rIYZTJSh9eGZV8nqvNUwdJ0BRs564U5eZrfAVAiLTBFrPrGByxh4cT/tj5ALTr9RqmZlmwKA3685q5R2lv3PSVUZ8ESOXQEk9XFDq1z3GRD6U=";
     </script>
     
     <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
-    
