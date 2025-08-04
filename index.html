@@ -89,28 +89,6 @@
             transform: translateY(-2px);
         }
 
-        /* Admin Toggle */
-        .admin-toggle {
-            position: fixed;
-            top: 2rem;
-            right: 6rem;
-            z-index: 1000;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .admin-toggle:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-
         /* Content sections */
         .hidden {
             display: none;
@@ -264,134 +242,176 @@
             transform: translateY(-2px);
         }
 
-        /* Admin Panel */
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Admin Panel Styles */
         .admin-panel {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 10000;
             display: none;
-            overflow: auto;
+            overflow-y: auto;
         }
 
         .admin-content {
-            background: white;
-            margin: 2rem;
-            padding: 2rem;
-            border-radius: 10px;
             max-width: 800px;
             margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .admin-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: between;
             align-items: center;
             margin-bottom: 2rem;
             border-bottom: 2px solid #eee;
             padding-bottom: 1rem;
         }
 
-        .admin-section {
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
             margin-bottom: 2rem;
-            padding: 1rem;
-            border: 1px solid #eee;
-            border-radius: 8px;
         }
 
-        .admin-section h3 {
-            color: #e74c3c;
-            margin-bottom: 1rem;
+        .admin-tab {
+            padding: 0.5rem 1rem;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .admin-input {
+        .admin-tab.active {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .admin-field input,
+        .admin-field textarea {
             width: 100%;
             padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
             font-family: 'Inter', sans-serif;
         }
 
-        .admin-textarea {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
+        .admin-field textarea {
             min-height: 100px;
             resize: vertical;
         }
 
-        .admin-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            margin-right: 1rem;
-            margin-bottom: 1rem;
+        .admin-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
         }
 
-        .admin-btn:hover {
-            background: #c0392b;
+        .admin-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn.primary {
+            background: #1a1a1a;
+            color: white;
         }
 
         .admin-btn.secondary {
-            background: #95a5a6;
+            background: #f5f5f5;
+            color: #333;
         }
 
-        .admin-btn.secondary:hover {
-            background: #7f8c8d;
-        }
-
-        .lang-tabs {
-            display: flex;
-            margin-bottom: 1rem;
-        }
-
-        .lang-tab {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-            cursor: pointer;
-            margin-right: 0.5rem;
-        }
-
-        .lang-tab.active {
-            background: #e74c3c;
+        .admin-btn.danger {
+            background: #dc3545;
             color: white;
-            border-color: #e74c3c;
         }
 
-        .editable {
-            position: relative;
+        .admin-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .edit-overlay {
+        .close-admin {
             position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #e74c3c;
-            color: white;
+            top: 1rem;
+            right: 1rem;
+            background: none;
             border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            font-size: 2rem;
             cursor: pointer;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            color: #666;
         }
 
-        .admin-mode .editable:hover .edit-overlay {
-            opacity: 1;
+        .section-manager {
+            border: 2px dashed #ddd;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .section-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
         }
 
         /* Responsive */
@@ -403,11 +423,6 @@
             .language-toggle {
                 top: 1rem;
                 right: 1rem;
-            }
-            
-            .admin-toggle {
-                top: 1rem;
-                right: 5rem;
             }
             
             .services-grid {
@@ -424,66 +439,50 @@
                 margin: 1rem;
                 padding: 1rem;
             }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+
+            .admin-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Dynamic sections */
+        .dynamic-section {
+            position: relative;
+        }
+
+        .section-edit-overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0 0 0 8px;
+            display: none;
+        }
+
+        .admin-mode .section-edit-overlay {
+            display: block;
+        }
+
+        .admin-mode .dynamic-section:hover {
+            outline: 2px dashed #1a1a1a;
+            outline-offset: 4px;
         }
     </style>
 </head>
 <body>
     <button class="language-toggle" onclick="toggleLanguage()">EN</button>
-    <button class="admin-toggle" onclick="toggleAdmin()"><i class="fas fa-edit"></i></button>
-
-    <!-- ADMIN PANEL -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-content">
-            <div class="admin-header">
-                <h2>Panel de Administración</h2>
-                <button class="admin-btn secondary" onclick="closeAdmin()">Cerrar</button>
-            </div>
-
-            <div class="admin-section">
-                <h3>Información Principal</h3>
-                <div class="lang-tabs">
-                    <div class="lang-tab active" data-lang="es">Español</div>
-                    <div class="lang-tab" data-lang="en">English</div>
-                </div>
-                <div class="lang-content" data-lang="es">
-                    <input type="text" class="admin-input" id="heroTitle_es" placeholder="Título principal">
-                    <input type="text" class="admin-input" id="heroSubtitle_es" placeholder="Subtítulo">
-                    <textarea class="admin-textarea" id="heroTagline_es" placeholder="Tagline"></textarea>
-                </div>
-                <div class="lang-content hidden" data-lang="en">
-                    <input type="text" class="admin-input" id="heroTitle_en" placeholder="Main title">
-                    <input type="text" class="admin-input" id="heroSubtitle_en" placeholder="Subtitle">
-                    <textarea class="admin-textarea" id="heroTagline_en" placeholder="Tagline"></textarea>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <h3>Evolución (3 Actos)</h3>
-                <div id="evolutionEditor"></div>
-            </div>
-
-            <div class="admin-section">
-                <h3>Servicios</h3>
-                <div id="servicesEditor"></div>
-            </div>
-
-            <div class="admin-section">
-                <h3>Casos de Estudio</h3>
-                <div id="casesEditor"></div>
-            </div>
-
-            <div class="admin-section">
-                <h3>Información de Contacto</h3>
-                <input type="text" class="admin-input" id="formspreeId" placeholder="xgvzlbvo">
-            </div>
-
-            <button class="admin-btn" onclick="saveContent()">Guardar Cambios</button>
-            <button class="admin-btn secondary" onclick="resetContent()">Restaurar Original</button>
-        </div>
-    </div>
 
     <!-- HERO SECTION -->
-    <section class="hero">
+    <section class="hero dynamic-section" data-section="hero">
+        <div class="section-edit-overlay">
+            <i class="fas fa-edit" onclick="editSection('hero')"></i>
+        </div>
         <div class="container">
             <h1 id="main-title">Francisco Medina</h1>
             <p class="subtitle" id="main-subtitle">Senior Copywriter - Director Creativo</p>
@@ -492,52 +491,127 @@
     </section>
 
     <!-- EVOLUTION SECTION -->
-    <section id="evolution-section">
+    <section id="evolution-section" class="dynamic-section" data-section="evolution">
+        <div class="section-edit-overlay">
+            <i class="fas fa-edit" onclick="editSection('evolution')"></i>
+            <i class="fas fa-trash" onclick="removeSection('evolution')"></i>
+        </div>
         <div class="container">
             <h2 id="evolution-title">La Evolución</h2>
             
-            <div class="evolution-grid" id="evolutionGrid">
-                <!-- Content will be loaded by JavaScript -->
+            <div class="evolution-grid" id="evolution-grid">
+                <div class="evolution-item">
+                    <div class="evolution-number">01</div>
+                    <h3 id="act1-title">El Redactor</h3>
+                    <div class="evolution-period">2009-2012</div>
+                    <p id="act1-desc">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</p>
+                </div>
+                
+                <div class="evolution-item">
+                    <div class="evolution-number">02</div>
+                    <h3 id="act2-title">El Estratega</h3>
+                    <div class="evolution-period">2013-2016</div>
+                    <p id="act2-desc">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</p>
+                </div>
+                
+                <div class="evolution-item">
+                    <div class="evolution-number">03</div>
+                    <h3 id="act3-title">El Director</h3>
+                    <div class="evolution-period">2016-presente</div>
+                    <p id="act3-desc">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- SERVICES SECTION -->
-    <section id="services-section">
+    <section id="services-section" class="dynamic-section" data-section="services">
+        <div class="section-edit-overlay">
+            <i class="fas fa-edit" onclick="editSection('services')"></i>
+            <i class="fas fa-trash" onclick="removeSection('services')"></i>
+        </div>
         <div class="container">
             <h2 id="services-title">Servicios</h2>
             
-            <div class="services-grid" id="servicesGrid">
-                <!-- Content will be loaded by JavaScript -->
+            <div class="services-grid" id="services-grid">
+                <div class="service-item">
+                    <h3 id="service1-title">Dirección Creativa</h3>
+                    <ul>
+                        <li id="service1-item1">Desarrollo de conceptos que venden</li>
+                        <li id="service1-item2">Liderazgo de equipos creativos</li>
+                        <li id="service1-item3">Supervisión de campañas 360°</li>
+                    </ul>
+                </div>
+                
+                <div class="service-item">
+                    <h3 id="service2-title">Estrategia Digital</h3>
+                    <ul>
+                        <li id="service2-item1">Meta Ads strategy</li>
+                        <li id="service2-item2">Social media strategy</li>
+                        <li id="service2-item3">Performance creative</li>
+                    </ul>
+                </div>
+                
+                <div class="service-item">
+                    <h3 id="service3-title">Consultoría</h3>
+                    <ul>
+                        <li id="service3-item1">Auditorías creativas</li>
+                        <li id="service3-item2">Restructuración de equipos</li>
+                        <li id="service3-item3">Procesos creativos eficientes</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CASES SECTION -->
-    <section id="cases-section">
+    <section id="cases-section" class="dynamic-section" data-section="cases">
+        <div class="section-edit-overlay">
+            <i class="fas fa-edit" onclick="editSection('cases')"></i>
+            <i class="fas fa-trash" onclick="removeSection('cases')"></i>
+        </div>
         <div class="container">
             <h2 id="cases-title">Casos Destacados</h2>
             
-            <div class="cases-grid" id="casesGrid">
-                <!-- Content will be loaded by JavaScript -->
+            <div class="cases-grid" id="cases-grid">
+                <div class="case-item">
+                    <h3 id="case1-title">Cencosud Digital</h3>
+                    <p id="case1-desc">Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.</p>
+                    <p class="case-result" id="case1-result">Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile</p>
+                </div>
+                
+                <div class="case-item">
+                    <h3 id="case2-title">Advertising Not Dead</h3>
+                    <p id="case2-desc">Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.</p>
+                    <p class="case-result" id="case2-result">Resultado: 8+ años de liderazgo creativo exitoso</p>
+                </div>
+                
+                <div class="case-item">
+                    <h3 id="case3-title">SientoCuarenta</h3>
+                    <p id="case3-desc">Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.</p>
+                    <p class="case-result" id="case3-result">Resultado: Proyecto creativo independiente exitoso 2012-2014</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CONTACT SECTION -->
-    <section id="contact-section">
+    <section id="contact-section" class="dynamic-section" data-section="contact">
+        <div class="section-edit-overlay">
+            <i class="fas fa-edit" onclick="editSection('contact')"></i>
+        </div>
         <div class="container">
             <h2 id="contact-title">Conversemos</h2>
             
-            <form class="contact-form" id="contactForm" method="POST">
+            <form class="contact-form" action="https://formspree.io/f/xgvzlbvo" method="POST">
                 <div class="form-group">
-                    <label for="name" id="label-name">Nombre completo</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="from_name" id="label-name">Nombre completo</label>
+                    <input type="text" id="from_name" name="name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email" id="label-email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="from_email" id="label-email">Email</label>
+                    <input type="email" id="from_email" name="email" required>
                 </div>
                 
                 <div class="form-group">
@@ -551,182 +625,138 @@
                 </div>
                 
                 <button type="submit" class="btn-submit" id="submit-btn">Enviar Mensaje</button>
+                
+                <div id="form-message" class="form-message" style="display: none;"></div>
             </form>
         </div>
     </section>
 
-    <script>
-        // Default content
-        const defaultContent = {
-            hero: {
-                es: {
-                    title: "Francisco Medina",
-                    subtitle: "Senior Copywriter - Director Creativo",
-                    tagline: "De redactor a director: Creatividad con visión estratégica"
-                },
-                en: {
-                    title: "Francisco Medina",
-                    subtitle: "Senior Copywriter - Creative Director",
-                    tagline: "From copywriter to director: Creativity with strategic vision"
-                }
-            },
-            evolution: {
-                title: {
-                    es: "La Evolución",
-                    en: "The Evolution"
-                },
-                acts: [
-                    {
-                        number: "01",
-                        period: "2009-2012",
-                        title: {
-                            es: "El Redactor",
-                            en: "The Copywriter"
-                        },
-                        description: {
-                            es: "Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.",
-                            en: "I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences."
-                        }
-                    },
-                    {
-                        number: "02",
-                        period: "2013-2016",
-                        title: {
-                            es: "El Estratega",
-                            en: "The Strategist"
-                        },
-                        description: {
-                            es: "Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.",
-                            en: "Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece."
-                        }
-                    },
-                    {
-                        number: "03",
-                        period: "2016-presente",
-                        title: {
-                            es: "El Director",
-                            en: "The Director"
-                        },
-                        description: {
-                            es: "Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.",
-                            en: "Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life."
-                        }
-                    }
-                ]
-            },
-            services: {
-                title: {
-                    es: "Servicios",
-                    en: "Services"
-                },
-                items: [
-                    {
-                        title: {
-                            es: "Dirección Creativa",
-                            en: "Creative Direction"
-                        },
-                        items: {
-                            es: [
-                                "Desarrollo de conceptos que venden",
-                                "Liderazgo de equipos creativos",
-                                "Supervisión de campañas 360°"
-                            ],
-                            en: [
-                                "Development of concepts that sell",
-                                "Creative team leadership",
-                                "360° campaign supervision"
-                            ]
-                        }
-                    },
-                    {
-                        title: {
-                            es: "Estrategia Digital",
-                            en: "Digital Strategy"
-                        },
-                        items: {
-                            es: [
-                                "Meta Ads strategy",
-                                "Social media strategy",
-                                "Performance creative"
-                            ],
-                            en: [
-                                "Meta Ads strategy",
-                                "Social media strategy",
-                                "Performance creative"
-                            ]
-                        }
-                    },
-                    {
-                        title: {
-                            es: "Consultoría",
-                            en: "Consulting"
-                        },
-                        items: {
-                            es: [
-                                "Auditorías creativas",
-                                "Restructuración de equipos",
-                                "Procesos creativos eficientes"
-                            ],
-                            en: [
-                                "Creative audits",
-                                "Team restructuring",
-                                "Efficient creative processes"
-                            ]
-                        }
-                    }
-                ]
-            },
-            cases: {
-                title: {
-                    es: "Casos Destacados",
-                    en: "Featured Cases"
-                },
-                items: [
-                    {
-                        title: "Cencosud Digital",
-                        description: {
-                            es: "Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.",
-                            en: "Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively."
-                        },
-                        result: {
-                            es: "Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile",
-                            en: "Result: Successful digital campaigns for Chile's largest retail group"
-                        }
-                    },
-                    {
-                        title: "Advertising Not Dead",
-                        description: {
-                            es: "Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.",
-                            en: "As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity."
-                        },
-                        result: {
-                            es: "Resultado: 8+ años de liderazgo creativo exitoso",
-                            en: "Result: 8+ years of successful creative leadership"
-                        }
-                    },
-                    {
-                        title: "SientoCuarenta",
-                        description: {
-                            es: "Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.",
-                            en: "Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine."
-                        },
-                        result: {
-                            es: "Resultado: Proyecto creativo independiente exitoso 2012-2014",
-                            en: "Result: Successful independent creative project 2012-2014"
-                        }
-                    }
-                ]
-            },
-            contact: {
-                formspreeId: "xgvzlbvo"
-            }
-        };
+    <!-- Add Section Manager -->
+    <div class="section-manager" id="section-manager" style="display: none;">
+        <h3>Agregar Nueva Sección</h3>
+        <p>Arrastra aquí para agregar una nueva sección o selecciona un tipo:</p>
+        <div class="section-controls">
+            <button class="admin-btn secondary" onclick="addSection('text')">
+                <i class="fas fa-paragraph"></i> Texto
+            </button>
+            <button class="admin-btn secondary" onclick="addSection('gallery')">
+                <i class="fas fa-images"></i> Galería
+            </button>
+            <button class="admin-btn secondary" onclick="addSection('testimonials')">
+                <i class="fas fa-quote-left"></i> Testimonios
+            </button>
+            <button class="admin-btn secondary" onclick="addSection('timeline')">
+                <i class="fas fa-timeline"></i> Timeline
+            </button>
+        </div>
+    </div>
 
-        // Language functionality
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <button class="close-admin" onclick="closeAdmin()">&times;</button>
+            
+            <div class="admin-header">
+                <h2><i class="fas fa-cog"></i> Editor de Contenido</h2>
+                <div>
+                    <button class="admin-btn secondary" onclick="exportChanges()">
+                        <i class="fas fa-download"></i> Exportar Cambios
+                    </button>
+                    <button class="admin-btn primary" onclick="saveChanges()">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showAdminSection('content')">Contenido</button>
+                <button class="admin-tab" onclick="showAdminSection('sections')">Secciones</button>
+                <button class="admin-tab" onclick="showAdminSection('settings')">Configuración</button>
+            </div>
+
+            <!-- Content Tab -->
+            <div class="admin-section active" id="admin-content">
+                <div id="content-fields"></div>
+            </div>
+
+            <!-- Sections Tab -->
+            <div class="admin-section" id="admin-sections">
+                <h3>Gestión de Secciones</h3>
+                <div id="sections-list"></div>
+                <div class="admin-buttons">
+                    <button class="admin-btn primary" onclick="addNewSection()">
+                        <i class="fas fa-plus"></i> Agregar Sección
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="admin-section" id="admin-settings">
+                <h3>Configuración General</h3>
+                <div class="admin-field">
+                    <label>URL de Formspree</label>
+                    <input type="text" id="formspree-url" placeholder="https://formspree.io/f/xgvzlbvo">
+                </div>
+                <div class="admin-field">
+                    <label>Google Analytics ID</label>
+                    <input type="text" id="ga-id" placeholder="G-XXXXXXXXXX">
+                </div>
+                <div class="admin-field">
+                    <label>Meta Description</label>
+                    <textarea id="meta-description" placeholder="Descripción del sitio para SEO"></textarea>
+                </div>
+            </div>
+
+            <div class="admin-buttons">
+                <button class="admin-btn secondary" onclick="resetToDefaults()">
+                    <i class="fas fa-undo"></i> Restaurar Defaults
+                </button>
+                <button class="admin-btn danger" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> Limpiar Todo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language toggle functionality
         let currentLang = 'es';
+        let isAdminMode = false;
         
         const translations = {
             es: {
+                'main-subtitle': 'Senior Copywriter - Director Creativo',
+                'hero-tagline': 'De redactor a director: Creatividad con visión estratégica',
+                'evolution-title': 'La Evolución',
+                'act1-title': 'El Redactor',
+                'act1-desc': 'Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.',
+                'act2-title': 'El Estratega',
+                'act2-desc': 'Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.',
+                'act3-title': 'El Director',
+                'act3-desc': 'Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.',
+                'services-title': 'Servicios',
+                'service1-title': 'Dirección Creativa',
+                'service1-item1': 'Desarrollo de conceptos que venden',
+                'service1-item2': 'Liderazgo de equipos creativos',
+                'service1-item3': 'Supervisión de campañas 360°',
+                'service2-title': 'Estrategia Digital',
+                'service2-item1': 'Meta Ads strategy',
+                'service2-item2': 'Social media strategy',
+                'service2-item3': 'Performance creative',
+                'service3-title': 'Consultoría',
+                'service3-item1': 'Auditorías creativas',
+                'service3-item2': 'Restructuración de equipos',
+                'service3-item3': 'Procesos creativos eficientes',
+                'cases-title': 'Casos Destacados',
+                'case1-title': 'Cencosud Digital',
+                'case1-desc': 'Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.',
+                'case1-result': 'Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile',
+                'case2-title': 'Advertising Not Dead',
+                'case2-desc': 'Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.',
+                'case2-result': 'Resultado: 8+ años de liderazgo creativo exitoso',
+                'case3-title': 'SientoCuarenta',
+                'case3-desc': 'Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.',
+                'case3-result': 'Resultado: Proyecto creativo independiente exitoso 2012-2014',
                 'contact-title': 'Conversemos',
                 'label-name': 'Nombre completo',
                 'label-email': 'Email',
@@ -735,7 +765,39 @@
                 'submit-btn': 'Enviar Mensaje'
             },
             en: {
-                'contact-title': "Let's Talk",
+                'main-subtitle': 'Senior Copywriter - Creative Director',
+                'hero-tagline': 'From copywriter to director: Creativity with strategic vision',
+                'evolution-title': 'The Evolution',
+                'act1-title': 'The Copywriter',
+                'act1-desc': 'I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.',
+                'act2-title': 'The Strategist',
+                'act2-desc': 'Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.',
+                'act3-title': 'The Director',
+                'act3-desc': 'Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.',
+                'services-title': 'Services',
+                'service1-title': 'Creative Direction',
+                'service1-item1': 'Development of concepts that sell',
+                'service1-item2': 'Creative team leadership',
+                'service1-item3': '360° campaign supervision',
+                'service2-title': 'Digital Strategy',
+                'service2-item1': 'Meta Ads strategy',
+                'service2-item2': 'Social media strategy',
+                'service2-item3': 'Performance creative',
+                'service3-title': 'Consulting',
+                'service3-item1': 'Creative audits',
+                'service3-item2': 'Team restructuring',
+                'service3-item3': 'Efficient creative processes',
+                'cases-title': 'Featured Cases',
+                'case1-title': 'Cencosud Digital',
+                'case1-desc': 'Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively.',
+                'case1-result': 'Result: Successful digital campaigns for Chile\'s largest retail group',
+                'case2-title': 'Advertising Not Dead',
+                'case2-desc': 'As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity.',
+                'case2-result': 'Result: 8+ years of successful creative leadership',
+                'case3-title': 'SientoCuarenta',
+                'case3-desc': 'Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine.',
+                'case3-result': 'Result: Successful independent creative project 2012-2014',
+                'contact-title': 'Let\'s Talk',
                 'label-name': 'Full name',
                 'label-email': 'Email',
                 'label-phone': 'WhatsApp',
@@ -750,7 +812,6 @@
             
             toggleBtn.textContent = newLang === 'es' ? 'EN' : 'ES';
             
-            // Update static translations
             Object.keys(translations[newLang]).forEach(key => {
                 const element = document.getElementById(key);
                 if (element) {
@@ -759,269 +820,526 @@
             });
             
             currentLang = newLang;
-            loadContent();
+            saveToLocalStorage();
         }
 
         // Admin functionality
-        function toggleAdmin() {
-            const adminPanel = document.getElementById('adminPanel');
-            adminPanel.style.display = adminPanel.style.display === 'block' ? 'none' : 'block';
-            if (adminPanel.style.display === 'block') {
-                loadAdminContent();
+        function checkAdminAccess() {
+            // Method 1: Check URL hash
+            if (window.location.hash === '#admin' || window.location.hash === '#editor') {
+                enableAdminMode();
+                return;
             }
+            
+            // Method 2: Check localStorage for admin session
+            if (localStorage.getItem('adminMode') === 'true') {
+                enableAdminMode();
+                return;
+            }
+        }
+
+        function enableAdminMode() {
+            isAdminMode = true;
+            document.body.classList.add('admin-mode');
+            document.getElementById('section-manager').style.display = 'block';
+            localStorage.setItem('adminMode', 'true');
+            
+            // Show admin notification (subtle)
+            console.log('🔧 Admin mode enabled. Click on sections to edit or press Ctrl+E to open editor.');
+        }
+
+        function disableAdminMode() {
+            isAdminMode = false;
+            document.body.classList.remove('admin-mode');
+            document.getElementById('section-manager').style.display = 'none';
+            localStorage.removeItem('adminMode');
+            closeAdmin();
+        }
+
+        function openAdmin() {
+            document.getElementById('adminPanel').style.display = 'flex';
+            loadContentFields();
+            loadSectionsList();
+            loadSettings();
         }
 
         function closeAdmin() {
             document.getElementById('adminPanel').style.display = 'none';
         }
 
-        function loadAdminContent() {
-            const content = getContent();
+        function showAdminSection(sectionName) {
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            // Load hero content
-            document.getElementById('heroTitle_es').value = content.hero.es.title;
-            document.getElementById('heroTitle_en').value = content.hero.en.title;
-            document.getElementById('heroSubtitle_es').value = content.hero.es.subtitle;
-            document.getElementById('heroSubtitle_en').value = content.hero.en.subtitle;
-            document.getElementById('heroTagline_es').value = content.hero.es.tagline;
-            document.getElementById('heroTagline_en').value = content.hero.en.tagline;
-            
-            document.getElementById('formspreeId').value = content.contact.formspreeId;
-
-            // Load evolution editor
-            loadEvolutionEditor(content);
-            loadServicesEditor(content);
-            loadCasesEditor(content);
+            document.getElementById(`admin-${sectionName}`).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        function loadEvolutionEditor(content) {
-            const container = document.getElementById('evolutionEditor');
-            let html = '';
+        function editSection(sectionId) {
+            openAdmin();
+            showAdminSection('content');
             
-            content.evolution.acts.forEach((act, index) => {
-                html += `
-                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
-                        <h4>Acto ${act.number}</h4>
-                        <input type="text" class="admin-input" id="actPeriod_${index}" value="${act.period}" placeholder="Período">
-                        <input type="text" class="admin-input" id="actTitle_es_${index}" value="${act.title.es}" placeholder="Título (ES)">
-                        <input type="text" class="admin-input" id="actTitle_en_${index}" value="${act.title.en}" placeholder="Título (EN)">
-                        <textarea class="admin-textarea" id="actDesc_es_${index}" placeholder="Descripción (ES)">${act.description.es}</textarea>
-                        <textarea class="admin-textarea" id="actDesc_en_${index}" placeholder="Descripción (EN)">${act.description.en}</textarea>
-                    </div>
+            // Highlight relevant fields
+            setTimeout(() => {
+                const fields = document.querySelectorAll(`[data-section="${sectionId}"]`);
+                fields.forEach(field => {
+                    field.style.backgroundColor = '#fff3cd';
+                    setTimeout(() => {
+                        field.style.backgroundColor = '';
+                    }, 2000);
+                });
+            }, 100);
+        }
+
+        function loadContentFields() {
+            const contentFields = document.getElementById('content-fields');
+            contentFields.innerHTML = '';
+            
+            const sections = {
+                'hero': {
+                    title: 'Sección Principal',
+                    fields: [
+                        { id: 'main-title', label: 'Nombre', type: 'text' },
+                        { id: 'main-subtitle', label: 'Subtítulo', type: 'text' },
+                        { id: 'hero-tagline', label: 'Tagline', type: 'textarea' }
+                    ]
+                },
+                'evolution': {
+                    title: 'Evolución',
+                    fields: [
+                        { id: 'evolution-title', label: 'Título de Sección', type: 'text' },
+                        { id: 'act1-title', label: 'Acto 1 - Título', type: 'text' },
+                        { id: 'act1-desc', label: 'Acto 1 - Descripción', type: 'textarea' },
+                        { id: 'act2-title', label: 'Acto 2 - Título', type: 'text' },
+                        { id: 'act2-desc', label: 'Acto 2 - Descripción', type: 'textarea' },
+                        { id: 'act3-title', label: 'Acto 3 - Título', type: 'text' },
+                        { id: 'act3-desc', label: 'Acto 3 - Descripción', type: 'textarea' }
+                    ]
+                },
+                'services': {
+                    title: 'Servicios',
+                    fields: [
+                        { id: 'services-title', label: 'Título de Sección', type: 'text' },
+                        { id: 'service1-title', label: 'Servicio 1 - Título', type: 'text' },
+                        { id: 'service1-item1', label: 'Servicio 1 - Item 1', type: 'text' },
+                        { id: 'service1-item2', label: 'Servicio 1 - Item 2', type: 'text' },
+                        { id: 'service1-item3', label: 'Servicio 1 - Item 3', type: 'text' },
+                        { id: 'service2-title', label: 'Servicio 2 - Título', type: 'text' },
+                        { id: 'service2-item1', label: 'Servicio 2 - Item 1', type: 'text' },
+                        { id: 'service2-item2', label: 'Servicio 2 - Item 2', type: 'text' },
+                        { id: 'service2-item3', label: 'Servicio 2 - Item 3', type: 'text' },
+                        { id: 'service3-title', label: 'Servicio 3 - Título', type: 'text' },
+                        { id: 'service3-item1', label: 'Servicio 3 - Item 1', type: 'text' },
+                        { id: 'service3-item2', label: 'Servicio 3 - Item 2', type: 'text' },
+                        { id: 'service3-item3', label: 'Servicio 3 - Item 3', type: 'text' }
+                    ]
+                },
+                'cases': {
+                    title: 'Casos de Estudio',
+                    fields: [
+                        { id: 'cases-title', label: 'Título de Sección', type: 'text' },
+                        { id: 'case1-title', label: 'Caso 1 - Título', type: 'text' },
+                        { id: 'case1-desc', label: 'Caso 1 - Descripción', type: 'textarea' },
+                        { id: 'case1-result', label: 'Caso 1 - Resultado', type: 'text' },
+                        { id: 'case2-title', label: 'Caso 2 - Título', type: 'text' },
+                        { id: 'case2-desc', label: 'Caso 2 - Descripción', type: 'textarea' },
+                        { id: 'case2-result', label: 'Caso 2 - Resultado', type: 'text' },
+                        { id: 'case3-title', label: 'Caso 3 - Título', type: 'text' },
+                        { id: 'case3-desc', label: 'Caso 3 - Descripción', type: 'textarea' },
+                        { id: 'case3-result', label: 'Caso 3 - Resultado', type: 'text' }
+                    ]
+                },
+                'contact': {
+                    title: 'Contacto',
+                    fields: [
+                        { id: 'contact-title', label: 'Título de Sección', type: 'text' },
+                        { id: 'label-name', label: 'Label - Nombre', type: 'text' },
+                        { id: 'label-email', label: 'Label - Email', type: 'text' },
+                        { id: 'label-phone', label: 'Label - WhatsApp', type: 'text' },
+                        { id: 'label-message', label: 'Label - Mensaje', type: 'text' },
+                        { id: 'submit-btn', label: 'Texto del Botón', type: 'text' }
+                    ]
+                }
+            };
+
+            Object.keys(sections).forEach(sectionKey => {
+                const section = sections[sectionKey];
+                const sectionDiv = document.createElement('div');
+                sectionDiv.innerHTML = `
+                    <h3 style="margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid #eee;">${section.title}</h3>
                 `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function loadServicesEditor(content) {
-            const container = document.getElementById('servicesEditor');
-            let html = '';
-            
-            content.services.items.forEach((service, index) => {
-                html += `
-                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
-                        <h4>Servicio ${index + 1}</h4>
-                        <input type="text" class="admin-input" id="serviceTitle_es_${index}" value="${service.title.es}" placeholder="Título del servicio (ES)">
-                        <input type="text" class="admin-input" id="serviceTitle_en_${index}" value="${service.title.en}" placeholder="Título del servicio (EN)">
-                        <textarea class="admin-textarea" id="serviceItems_es_${index}" placeholder="Items del servicio (ES) - uno por línea">${service.items.es.join('\n')}</textarea>
-                        <textarea class="admin-textarea" id="serviceItems_en_${index}" placeholder="Items del servicio (EN) - uno por línea">${service.items.en.join('\n')}</textarea>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function loadCasesEditor(content) {
-            const container = document.getElementById('casesEditor');
-            let html = '';
-            
-            content.cases.items.forEach((caseItem, index) => {
-                html += `
-                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
-                        <h4>Caso ${index + 1}</h4>
-                        <input type="text" class="admin-input" id="caseTitle_${index}" value="${caseItem.title}" placeholder="Título del caso">
-                        <textarea class="admin-textarea" id="caseDesc_es_${index}" placeholder="Descripción (ES)">${caseItem.description.es}</textarea>
-                        <textarea class="admin-textarea" id="caseDesc_en_${index}" placeholder="Descripción (EN)">${caseItem.description.en}</textarea>
-                        <textarea class="admin-textarea" id="caseResult_es_${index}" placeholder="Resultado (ES)">${caseItem.result.es}</textarea>
-                        <textarea class="admin-textarea" id="caseResult_en_${index}" placeholder="Resultado (EN)">${caseItem.result.en}</textarea>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function saveContent() {
-            const content = getContent();
-            
-            // Save hero content
-            content.hero.es.title = document.getElementById('heroTitle_es').value;
-            content.hero.en.title = document.getElementById('heroTitle_en').value;
-            content.hero.es.subtitle = document.getElementById('heroSubtitle_es').value;
-            content.hero.en.subtitle = document.getElementById('heroSubtitle_en').value;
-            content.hero.es.tagline = document.getElementById('heroTagline_es').value;
-            content.hero.en.tagline = document.getElementById('heroTagline_en').value;
-            
-            // Save evolution content
-            content.evolution.acts.forEach((act, index) => {
-                act.period = document.getElementById(`actPeriod_${index}`).value;
-                act.title.es = document.getElementById(`actTitle_es_${index}`).value;
-                act.title.en = document.getElementById(`actTitle_en_${index}`).value;
-                act.description.es = document.getElementById(`actDesc_es_${index}`).value;
-                act.description.en = document.getElementById(`actDesc_en_${index}`).value;
-            });
-            
-            // Save services content
-            content.services.items.forEach((service, index) => {
-                service.title.es = document.getElementById(`serviceTitle_es_${index}`).value;
-                service.title.en = document.getElementById(`serviceTitle_en_${index}`).value;
-                service.items.es = document.getElementById(`serviceItems_es_${index}`).value.split('\n').filter(item => item.trim());
-                service.items.en = document.getElementById(`serviceItems_en_${index}`).value.split('\n').filter(item => item.trim());
-            });
-            
-            // Save cases content
-            content.cases.items.forEach((caseItem, index) => {
-                caseItem.title = document.getElementById(`caseTitle_${index}`).value;
-                caseItem.description.es = document.getElementById(`caseDesc_es_${index}`).value;
-                caseItem.description.en = document.getElementById(`caseDesc_en_${index}`).value;
-                caseItem.result.es = document.getElementById(`caseResult_es_${index}`).value;
-                caseItem.result.en = document.getElementById(`caseResult_en_${index}`).value;
-            });
-            
-            // Save contact content
-            content.contact.formspreeId = document.getElementById('formspreeId').value;
-            
-            localStorage.setItem('portfolioContent', JSON.stringify(content));
-            loadContent();
-            closeAdmin();
-            alert('Contenido guardado exitosamente!');
-        }
-
-        function resetContent() {
-            if (confirm('¿Estás seguro de que quieres restaurar el contenido original?')) {
-                localStorage.removeItem('portfolioContent');
-                loadContent();
-                closeAdmin();
-                alert('Contenido restaurado al original.');
-            }
-        }
-
-        function getContent() {
-            const saved = localStorage.getItem('portfolioContent');
-            return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultContent));
-        }
-
-        function loadContent() {
-            const content = getContent();
-            
-            // Load hero content
-            document.getElementById('main-title').textContent = content.hero[currentLang].title;
-            document.getElementById('main-subtitle').textContent = content.hero[currentLang].subtitle;
-            document.getElementById('hero-tagline').textContent = content.hero[currentLang].tagline;
-            
-            // Load evolution content
-            document.getElementById('evolution-title').textContent = content.evolution.title[currentLang];
-            loadEvolutionContent(content);
-            
-            // Load services content
-            document.getElementById('services-title').textContent = content.services.title[currentLang];
-            loadServicesContent(content);
-            
-            // Load cases content
-            document.getElementById('cases-title').textContent = content.cases.title[currentLang];
-            loadCasesContent(content);
-            
-            // Update form action
-            updateFormAction(content.contact.formspreeId);
-        }
-
-        function loadEvolutionContent(content) {
-            const container = document.getElementById('evolutionGrid');
-            let html = '';
-            
-            content.evolution.acts.forEach(act => {
-                html += `
-                    <div class="evolution-item">
-                        <div class="evolution-number">${act.number}</div>
-                        <h3>${act.title[currentLang]}</h3>
-                        <div class="evolution-period">${act.period}</div>
-                        <p>${act.description[currentLang]}</p>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function loadServicesContent(content) {
-            const container = document.getElementById('servicesGrid');
-            let html = '';
-            
-            content.services.items.forEach(service => {
-                html += `
-                    <div class="service-item">
-                        <h3>${service.title[currentLang]}</h3>
-                        <ul>
-                            ${service.items[currentLang].map(item => `<li>${item}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function loadCasesContent(content) {
-            const container = document.getElementById('casesGrid');
-            let html = '';
-            
-            content.cases.items.forEach(caseItem => {
-                html += `
-                    <div class="case-item">
-                        <h3>${caseItem.title}</h3>
-                        <p>${caseItem.description[currentLang]}</p>
-                        <p class="case-result">${caseItem.result[currentLang]}</p>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function updateFormAction(formspreeId) {
-            const form = document.getElementById('contactForm');
-            if (formspreeId && formspreeId !== 'xgvzlbvo') {
-                form.action = `https://formspree.io/f/${formspreeId}`;
-            }
-        }
-
-        // Language tab functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load initial content
-            loadContent();
-            
-            // Language tabs in admin
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('lang-tab')) {
-                    const lang = e.target.dataset.lang;
+                
+                section.fields.forEach(field => {
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.className = 'admin-field';
+                    fieldDiv.setAttribute('data-section', sectionKey);
                     
-                    // Update tab active state
-                    document.querySelectorAll('.lang-tab').forEach(tab => tab.classList.remove('active'));
-                    e.target.classList.add('active');
+                    const currentValue = document.getElementById(field.id)?.textContent || '';
                     
-                    // Show/hide content
-                    document.querySelectorAll('.lang-content').forEach(content => {
-                        if (content.dataset.lang === lang) {
-                            content.classList.remove('hidden');
-                        } else {
-                            content.classList.add('hidden');
+                    fieldDiv.innerHTML = `
+                        <label>${field.label}</label>
+                        ${field.type === 'textarea' 
+                            ? `<textarea data-field="${field.id}">${currentValue}</textarea>`
+                            : `<input type="text" data-field="${field.id}" value="${currentValue}">`
                         }
-                    });
+                    `;
+                    
+                    sectionDiv.appendChild(fieldDiv);
+                });
+                
+                contentFields.appendChild(sectionDiv);
+            });
+        }
+
+        function loadSectionsList() {
+            const sectionsList = document.getElementById('sections-list');
+            const sections = document.querySelectorAll('.dynamic-section');
+            
+            sectionsList.innerHTML = '';
+            
+            sections.forEach((section, index) => {
+                const sectionId = section.getAttribute('data-section');
+                const sectionTitle = section.querySelector('h2')?.textContent || `Sección ${index + 1}`;
+                
+                const sectionDiv = document.createElement('div');
+                sectionDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid #ddd; margin: 0.5rem 0; border-radius: 6px;';
+                
+                sectionDiv.innerHTML = `
+                    <div>
+                        <strong>${sectionTitle}</strong>
+                        <small style="display: block; color: #666;">ID: ${sectionId}</small>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="admin-btn secondary" onclick="moveSection('${sectionId}', 'up')">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button class="admin-btn secondary" onclick="moveSection('${sectionId}', 'down')">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                        <button class="admin-btn secondary" onclick="editSection('${sectionId}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        ${sectionId !== 'hero' && sectionId !== 'contact' 
+                            ? `<button class="admin-btn danger" onclick="removeSection('${sectionId}')">
+                                <i class="fas fa-trash"></i>
+                            </button>`
+                            : ''
+                        }
+                    </div>
+                `;
+                
+                sectionsList.appendChild(sectionDiv);
+            });
+        }
+
+        function loadSettings() {
+            // Load current Formspree URL
+            const form = document.querySelector('.contact-form');
+            const formAction = form.getAttribute('action');
+            document.getElementById('formspree-url').value = formAction;
+            
+            // Load saved settings from localStorage
+            const savedSettings = JSON.parse(localStorage.getItem('portfolioSettings') || '{}');
+            if (savedSettings.gaId) {
+                document.getElementById('ga-id').value = savedSettings.gaId;
+            }
+            if (savedSettings.metaDescription) {
+                document.getElementById('meta-description').value = savedSettings.metaDescription;
+            }
+        }
+
+        function saveChanges() {
+            // Save content changes
+            const fields = document.querySelectorAll('[data-field]');
+            fields.forEach(field => {
+                const fieldId = field.getAttribute('data-field');
+                const targetElement = document.getElementById(fieldId);
+                if (targetElement) {
+                    targetElement.textContent = field.value;
                 }
             });
+            
+            // Save settings
+            const settings = {
+                formspreeUrl: document.getElementById('formspree-url').value,
+                gaId: document.getElementById('ga-id').value,
+                metaDescription: document.getElementById('meta-description').value
+            };
+            
+            localStorage.setItem('portfolioSettings', JSON.stringify(settings));
+            
+            // Update form action
+            const form = document.querySelector('.contact-form');
+            form.setAttribute('action', settings.formspreeUrl);
+            
+            // Save to localStorage
+            saveToLocalStorage();
+            
+            alert('Cambios guardados correctamente!');
+        }
+
+        function saveToLocalStorage() {
+            const data = {
+                currentLang: currentLang,
+                content: {}
+            };
+            
+            // Save all editable content
+            Object.keys(translations.es).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    data.content[key] = element.textContent;
+                }
+            });
+            
+            localStorage.setItem('portfolioData', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const data = JSON.parse(localStorage.getItem('portfolioData') || '{}');
+            
+            if (data.currentLang) {
+                currentLang = data.currentLang;
+                document.querySelector('.language-toggle').textContent = currentLang === 'es' ? 'EN' : 'ES';
+            }
+            
+            if (data.content) {
+                Object.keys(data.content).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.textContent = data.content[key];
+                    }
+                });
+            }
+        }
+
+        function exportChanges() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'francisco-medina-portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function resetToDefaults() {
+            if (confirm('¿Estás seguro de que quieres restaurar el contenido por defecto?')) {
+                localStorage.removeItem('portfolioData');
+                localStorage.removeItem('portfolioSettings');
+                location.reload();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('¿Estás seguro de que quieres eliminar todos los datos guardados?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function addSection(type) {
+            const sectionId = `custom-${Date.now()}`;
+            let sectionHTML = '';
+            
+            switch(type) {
+                case 'text':
+                    sectionHTML = `
+                        <section class="dynamic-section" data-section="${sectionId}">
+                            <div class="section-edit-overlay">
+                                <i class="fas fa-edit" onclick="editSection('${sectionId}')"></i>
+                                <i class="fas fa-trash" onclick="removeSection('${sectionId}')"></i>
+                            </div>
+                            <div class="container">
+                                <h2 id="${sectionId}-title">Nueva Sección</h2>
+                                <p id="${sectionId}-content">Contenido de la nueva sección.</p>
+                            </div>
+                        </section>
+                    `;
+                    break;
+                case 'gallery':
+                    sectionHTML = `
+                        <section class="dynamic-section" data-section="${sectionId}">
+                            <div class="section-edit-overlay">
+                                <i class="fas fa-edit" onclick="editSection('${sectionId}')"></i>
+                                <i class="fas fa-trash" onclick="removeSection('${sectionId}')"></i>
+                            </div>
+                            <div class="container">
+                                <h2 id="${sectionId}-title">Galería</h2>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                    <div style="background: #f5f5f5; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-image" style="font-size: 2rem; color: #ccc;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    `;
+                    break;
+                case 'testimonials':
+                    sectionHTML = `
+                        <section class="dynamic-section" data-section="${sectionId}">
+                            <div class="section-edit-overlay">
+                                <i class="fas fa-edit" onclick="editSection('${sectionId}')"></i>
+                                <i class="fas fa-trash" onclick="removeSection('${sectionId}')"></i>
+                            </div>
+                            <div class="container">
+                                <h2 id="${sectionId}-title">Testimonios</h2>
+                                <blockquote style="font-style: italic; font-size: 1.2rem; margin: 2rem 0; padding-left: 2rem; border-left: 4px solid #1a1a1a;">
+                                    <p id="${sectionId}-quote">"Testimonio de cliente satisfecho."</p>
+                                    <footer style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                                        — <cite id="${sectionId}-author">Nombre del Cliente</cite>
+                                    </footer>
+                                </blockquote>
+                            </div>
+                        </section>
+                    `;
+                    break;
+                case 'timeline':
+                    sectionHTML = `
+                        <section class="dynamic-section" data-section="${sectionId}">
+                            <div class="section-edit-overlay">
+                                <i class="fas fa-edit" onclick="editSection('${sectionId}')"></i>
+                                <i class="fas fa-trash" onclick="removeSection('${sectionId}')"></i>
+                            </div>
+                            <div class="container">
+                                <h2 id="${sectionId}-title">Timeline</h2>
+                                <div style="position: relative; padding-left: 2rem;">
+                                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: #1a1a1a;"></div>
+                                    <div style="margin-bottom: 2rem; position: relative;">
+                                        <div style="position: absolute; left: -1.5rem; top: 0.5rem; width: 1rem; height: 1rem; background: #1a1a1a; border-radius: 50%;"></div>
+                                        <h3 id="${sectionId}-event1-title">Evento 1</h3>
+                                        <p style="color: #666; font-size: 0.9rem;">2024</p>
+                                        <p id="${sectionId}-event1-desc">Descripción del evento.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    `;
+                    break;
+            }
+            
+            const contactSection = document.getElementById('contact-section');
+            contactSection.insertAdjacentHTML('beforebegin', sectionHTML);
+            
+            // Refresh admin panel
+            if (isAdminMode) {
+                loadSectionsList();
+                loadContentFields();
+            }
+        }
+
+        function removeSection(sectionId) {
+            if (sectionId === 'hero' || sectionId === 'contact') {
+                alert('No puedes eliminar las secciones principales.');
+                return;
+            }
+            
+            if (confirm('¿Estás seguro de que quieres eliminar esta sección?')) {
+                const section = document.querySelector(`[data-section="${sectionId}"]`);
+                if (section) {
+                    section.remove();
+                    if (isAdminMode) {
+                        loadSectionsList();
+                        loadContentFields();
+                    }
+                }
+            }
+        }
+
+        function moveSection(sectionId, direction) {
+            const section = document.querySelector(`[data-section="${sectionId}"]`);
+            if (!section) return;
+            
+            if (direction === 'up' && section.previousElementSibling) {
+                section.parentNode.insertBefore(section, section.previousElementSibling);
+            } else if (direction === 'down' && section.nextElementSibling) {
+                section.parentNode.insertBefore(section.nextElementSibling, section);
+            }
+            
+            if (isAdminMode) {
+                loadSectionsList();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+E or Cmd+E to open admin panel
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                if (isAdminMode) {
+                    openAdmin();
+                } else {
+                    // Enable admin mode if not active
+                    enableAdminMode();
+                    openAdmin();
+                }
+            }
+            
+            // Escape to close admin panel
+            if (e.key === 'Escape') {
+                closeAdmin();
+            }
+            
+            // Ctrl+S or Cmd+S to save changes
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                if (isAdminMode) {
+                    saveChanges();
+                }
+            }
         });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+            checkAdminAccess();
+            
+            // Handle form submission
+            const form = document.querySelector('.contact-form');
+            form.addEventListener('submit', function(e) {
+                const submitBtn = document.getElementById('submit-btn');
+                const messageDiv = document.getElementById('form-message');
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+                
+                // Let Formspree handle the submission naturally
+                // Show success message after a delay (assuming success)
+                setTimeout(() => {
+                    messageDiv.className = 'form-message success';
+                    messageDiv.textContent = currentLang === 'es' ? 
+                        '¡Mensaje enviado correctamente! Te responderé pronto.' : 
+                        'Message sent successfully! I\'ll get back to you soon.';
+                    messageDiv.style.display = 'block';
+                    
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = currentLang === 'es' ? 'Enviar Mensaje' : 'Send Message';
+                }, 1000);
+            });
+        });
+
+        // Handle URL changes
+        window.addEventListener('hashchange', function() {
+            checkAdminAccess();
+        });
+
+        // Add some debug info for admin mode
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('🔧 Development mode detected');
+            console.log('💡 Tips:');
+            console.log('   - Add #admin to URL to enable admin mode');
+            console.log('   - Press Ctrl+E to open editor');
+            console.log('   - Click on sections to edit them');
+        }
     </script>
 </body>
 </html>
