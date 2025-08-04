@@ -3,352 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francisco Medina - Editor de Contenido</title>
+    <title>Francisco Medina - Editor Auto-Sync</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        .editor-section {
-            transition: all 0.3s ease;
+        .editor-field {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            transition: border-color 0.3s ease;
         }
-        .editor-section:hover {
-            background-color: #f8fafc;
+        .editor-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .saving {
+            animation: pulse 2s infinite;
+        }
+        .success {
+            background-color: #10b981;
+            color: white;
+        }
+        .error {
+            background-color: #ef4444;
+            color: white;
         }
         .preview-container {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            height: 600px;
+            overflow-y: auto;
         }
-        .preview-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .preview-section {
-            padding: 2rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .saved-indicator {
-            display: none;
-            animation: fadeInOut 2s ease-in-out;
-        }
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+        .github-login {
+            background: linear-gradient(135deg, #24292e 0%, #2f363d 100%);
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                        <i class="fas fa-edit text-blue-600 mr-2"></i>
-                        Editor de Contenido - Francisco Medina
-                    </h1>
-                    <p class="text-gray-600">Edita el contenido de tu portfolio y exporta los cambios</p>
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-edit text-blue-600 text-2xl mr-3"></i>
+                    <h1 class="text-2xl font-bold text-gray-900">Editor Portfolio - Francisco Medina</h1>
                 </div>
-                <div class="flex space-x-4">
-                    <button onclick="saveChanges()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200">
-                        <i class="fas fa-save mr-2"></i>Guardar Cambios
-                    </button>
-                    <button onclick="exportHTML()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
-                        <i class="fas fa-download mr-2"></i>Exportar HTML
+                <div id="user-info" class="hidden flex items-center space-x-4">
+                    <span id="username" class="text-gray-700"></span>
+                    <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
                     </button>
                 </div>
             </div>
-            <div id="savedIndicator" class="saved-indicator mt-4 p-3 bg-green-100 text-green-800 rounded-lg">
-                <i class="fas fa-check-circle mr-2"></i>Cambios guardados correctamente
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center">
+        <div class="max-w-md w-full space-y-8 p-8">
+            <div class="text-center">
+                <i class="fab fa-github text-6xl text-gray-800 mb-4"></i>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Conectar con GitHub</h2>
+                <p class="text-gray-600 mb-8">Autoriza el acceso para editar tu portfolio directamente</p>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">GitHub Personal Access Token</label>
+                    <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-xs text-gray-500 mt-2">
+                        <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" class="text-blue-600 hover:underline">
+                            Crear token con permisos 'repo'
+                        </a>
+                    </p>
+                    
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Repositorio</label>
+                        <input type="text" id="repo-name" value="misterbins/francisco-medina-portfolio" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <button id="connect-btn" class="w-full mt-6 github-login text-white font-semibold py-3 px-4 rounded-md hover:opacity-90 transition duration-300">
+                        <i class="fab fa-github mr-2"></i>Conectar y Cargar Contenido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editor Screen -->
+    <div id="editor-screen" class="hidden">
+        <!-- Status Bar -->
+        <div id="status-bar" class="bg-blue-50 border-b px-4 py-2">
+            <div class="flex items-center justify-between max-w-7xl mx-auto">
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Estado:</span>
+                    <span id="status-text" class="text-sm font-medium text-green-600">Conectado</span>
+                    <span id="last-save" class="text-sm text-gray-500"></span>
+                </div>
+                <button id="save-all" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                    <i class="fas fa-save mr-2"></i>Guardar Todos los Cambios
+                </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Editor Panel -->
-            <div class="space-y-6">
-                <!-- Información Personal -->
-                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-user text-indigo-600 mr-2"></i>Información Personal
-                    </h2>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Principal</label>
-                            <input type="text" id="mainName" value="Francisco Medina" 
-                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (ES)</label>
-                                <input type="text" id="subtitleES" value="Senior Copywriter - Director Creativo"
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (EN)</label>
-                                <input type="text" id="subtitleEN" value="Senior Copywriter - Creative Director"
-                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (ES)</label>
-                                <textarea id="taglineES" rows="2" 
-                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">De redactor a director: Creatividad con visión estratégica</textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (EN)</label>
-                                <textarea id="taglineEN" rows="2"
-                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">From copywriter to director: Creativity with strategic vision</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- La Evolución -->
-                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-chart-line text-green-600 mr-2"></i>La Evolución (3 Actos)
-                    </h2>
-                    
-                    <div id="evolutionEditor" class="space-y-6">
-                        <div class="border-l-4 border-blue-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Acto 1: El Redactor (2009-2012)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="act1TitleES" value="El Redactor"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="act1TitleEN" value="The Copywriter"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
-                                    <textarea id="act1DescES" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
-                                    <textarea id="act1DescEN" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.</textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-l-4 border-green-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Acto 2: El Estratega (2013-2016)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="act2TitleES" value="El Estratega"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="act2TitleEN" value="The Strategist"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
-                                    <textarea id="act2DescES" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
-                                    <textarea id="act2DescEN" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.</textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-l-4 border-purple-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Acto 3: El Director (2016-presente)</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="act3TitleES" value="El Director"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="act3TitleEN" value="The Director"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
-                                    <textarea id="act3DescES" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
-                                    <textarea id="act3DescEN" rows="3"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Servicios -->
-                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-cogs text-orange-600 mr-2"></i>Servicios
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Editor Panel -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-edit mr-2 text-blue-600"></i>Editor de Contenido
                     </h2>
                     
                     <div class="space-y-6">
-                        <!-- Servicio 1 -->
-                        <div class="border-l-4 border-red-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 1</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Información Personal -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-900 mb-3">Información Personal</h3>
+                            <div class="space-y-3">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="service1TitleES" value="Dirección Creativa"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Principal</label>
+                                    <input type="text" id="main-title" class="editor-field w-full" value="Francisco Medina">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="service1TitleEN" value="Creative Direction"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
-                                    <textarea id="service1ItemsES" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Desarrollo de conceptos que venden
-Liderazgo de equipos creativos
-Supervisión de campañas 360°</textarea>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo (ES)</label>
+                                    <input type="text" id="subtitle-es" class="editor-field w-full" value="Senior Copywriter - Director Creativo">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
-                                    <textarea id="service1ItemsEN" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Development of concepts that sell
-Creative team leadership
-360° campaign supervision</textarea>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo (EN)</label>
+                                    <input type="text" id="subtitle-en" class="editor-field w-full" value="Senior Copywriter - Creative Director">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tagline (ES)</label>
+                                    <input type="text" id="tagline-es" class="editor-field w-full" value="De redactor a director: Creatividad con visión estratégica">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tagline (EN)</label>
+                                    <input type="text" id="tagline-en" class="editor-field w-full" value="From copywriter to director: Creativity with strategic vision">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Servicio 2 -->
-                        <div class="border-l-4 border-blue-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 2</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="service2TitleES" value="Estrategia Digital"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <!-- Evolución -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-900 mb-3">La Evolución / The Evolution</h3>
+                            <div class="space-y-4">
+                                <!-- Acto 1 -->
+                                <div class="bg-white p-3 rounded border">
+                                    <h4 class="font-medium mb-2">Acto 1: El Redactor / The Copywriter</h4>
+                                    <textarea id="act1-desc-es" class="editor-field w-full h-20" placeholder="Descripción en español">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</textarea>
+                                    <textarea id="act1-desc-en" class="editor-field w-full h-20 mt-2" placeholder="Descripción en inglés">I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.</textarea>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="service2TitleEN" value="Digital Strategy"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                
+                                <!-- Acto 2 -->
+                                <div class="bg-white p-3 rounded border">
+                                    <h4 class="font-medium mb-2">Acto 2: El Estratega / The Strategist</h4>
+                                    <textarea id="act2-desc-es" class="editor-field w-full h-20">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</textarea>
+                                    <textarea id="act2-desc-en" class="editor-field w-full h-20 mt-2">Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.</textarea>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
-                                    <textarea id="service2ItemsES" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Meta Ads strategy
-Social media strategy
-Performance creative</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
-                                    <textarea id="service2ItemsEN" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Meta Ads strategy
-Social media strategy
-Performance creative</textarea>
+                                
+                                <!-- Acto 3 -->
+                                <div class="bg-white p-3 rounded border">
+                                    <h4 class="font-medium mb-2">Acto 3: El Director / The Director</h4>
+                                    <textarea id="act3-desc-es" class="editor-field w-full h-20">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</textarea>
+                                    <textarea id="act3-desc-en" class="editor-field w-full h-20 mt-2">Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.</textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Servicio 3 -->
-                        <div class="border-l-4 border-green-500 pl-4">
-                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 3</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Servicios -->
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-900 mb-3">Mis Servicios</h3>
+                            <div class="space-y-3">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
-                                    <input type="text" id="service3TitleES" value="Consultoría"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Servicio 1 - Título (ES/EN)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="service1-title-es" class="editor-field" value="Dirección Creativa">
+                                        <input type="text" id="service1-title-en" class="editor-field" value="Creative Direction">
+                                    </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
-                                    <input type="text" id="service3TitleEN" value="Consulting"
-                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Servicio 2 - Título (ES/EN)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="service2-title-es" class="editor-field" value="Estrategia Digital">
+                                        <input type="text" id="service2-title-en" class="editor-field" value="Digital Strategy">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Servicio 3 - Título (ES/EN)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="service3-title-es" class="editor-field" value="Consultoría">
+                                        <input type="text" id="service3-title-en" class="editor-field" value="Consulting">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        </div>
+
+                        <!-- Auto-save Toggle -->
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <div class="flex items-center justify-between">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
-                                    <textarea id="service3ItemsES" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Auditorías creativas
-Restructuración de equipos
-Procesos creativos eficientes</textarea>
+                                    <h3 class="font-semibold text-gray-900">Guardado Automático</h3>
+                                    <p class="text-sm text-gray-600">Los cambios se guardan automáticamente cada 30 segundos</p>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
-                                    <textarea id="service3ItemsEN" rows="4"
-                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Creative audits
-Team restructuring
-Efficient creative processes</textarea>
-                                </div>
+                                <label class="flex items-center">
+                                    <input type="checkbox" id="auto-save" checked class="mr-2">
+                                    <span class="text-sm">Activado</span>
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Configuración del Formulario -->
-                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4">
-                        <i class="fas fa-envelope text-red-600 mr-2"></i>Configuración del Formulario
+                <!-- Preview Panel -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-eye mr-2 text-green-600"></i>Vista Previa
                     </h2>
                     
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Form ID de Formspree</label>
-                            <input type="text" id="formspreeId" value="TU_FORM_ID" placeholder="ej: xzbqwrxy"
-                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <p class="text-sm text-gray-600 mt-1">Obtén tu Form ID en <a href="https://formspree.io" class="text-blue-600 hover:underline" target="_blank">formspree.io</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">
-                    <i class="fas fa-eye text-purple-600 mr-2"></i>Vista Previa
-                </h2>
-                
-                <div id="previewContainer" class="preview-container border-2 border-dashed border-gray-300 p-6 rounded-lg bg-gray-50 min-h-96">
-                    <div class="text-center">
-                        <h1 id="previewName" class="preview-title">Francisco Medina</h1>
-                        <p id="previewSubtitle" class="text-lg text-gray-600 mb-4">Senior Copywriter - Director Creativo</p>
-                        <p id="previewTagline" class="text-gray-700">De redactor a director: Creatividad con visión estratégica</p>
+                    <div class="mb-4 flex space-x-2">
+                        <button id="preview-es" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Español</button>
+                        <button id="preview-en" class="bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm">English</button>
+                        <button id="refresh-preview" class="bg-green-600 text-white px-3 py-1 rounded text-sm ml-auto">
+                            <i class="fas fa-sync-alt mr-1"></i>Actualizar
+                        </button>
                     </div>
                     
-                    <div class="preview-section">
-                        <h2 class="text-2xl font-bold mb-6">La Evolución</h2>
-                        <div id="previewEvolution" class="space-y-6">
-                            <!-- Evolution content will be rendered here -->
-                        </div>
-                    </div>
-                    
-                    <div class="preview-section">
-                        <h2 class="text-2xl font-bold mb-6">Servicios</h2>
-                        <div id="previewServices" class="space-y-6">
-                            <!-- Services content will be rendered here -->
+                    <div id="preview-frame" class="preview-container bg-gray-50 p-4">
+                        <div class="text-center py-8">
+                            <i class="fas fa-spinner fa-spin text-2xl text-gray-400"></i>
+                            <p class="text-gray-500 mt-2">Cargando vista previa...</p>
                         </div>
                     </div>
                 </div>
@@ -357,715 +240,320 @@ Efficient creative processes</textarea>
     </div>
 
     <script>
-        // Content storage
-        let content = {};
-
-        // Initialize editor
-        document.addEventListener('DOMContentLoaded', function() {
-            loadContent();
-            setupEventListeners();
-            updatePreview();
-        });
-
-        // Load content from localStorage or defaults
-        function loadContent() {
-            const savedContent = localStorage.getItem('franciscoPortfolioContent');
-            if (savedContent) {
-                content = JSON.parse(savedContent);
-                populateFields();
-            } else {
-                loadDefaults();
-            }
-        }
-
-        // Load default content
-        function loadDefaults() {
-            content = {
-                mainName: 'Francisco Medina',
-                subtitleES: 'Senior Copywriter - Director Creativo',
-                subtitleEN: 'Senior Copywriter - Creative Director',
-                taglineES: 'De redactor a director: Creatividad con visión estratégica',
-                taglineEN: 'From copywriter to director: Creativity with strategic vision',
-                evolution: {
-                    act1: {
-                        titleES: 'El Redactor',
-                        titleEN: 'The Copywriter',
-                        descES: 'Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.',
-                        descEN: 'I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.'
-                    },
-                    act2: {
-                        titleES: 'El Estratega',
-                        titleEN: 'The Strategist',
-                        descES: 'Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.',
-                        descEN: 'Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.'
-                    },
-                    act3: {
-                        titleES: 'El Director',
-                        titleEN: 'The Director',
-                        descES: 'Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.',
-                        descEN: 'Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.'
-                    }
-                },
-                services: {
-                    service1: {
-                        titleES: 'Dirección Creativa',
-                        titleEN: 'Creative Direction',
-                        itemsES: ['Desarrollo de conceptos que venden', 'Liderazgo de equipos creativos', 'Supervisión de campañas 360°'],
-                        itemsEN: ['Development of concepts that sell', 'Creative team leadership', '360° campaign supervision']
-                    },
-                    service2: {
-                        titleES: 'Estrategia Digital',
-                        titleEN: 'Digital Strategy',
-                        itemsES: ['Meta Ads strategy', 'Social media strategy', 'Performance creative'],
-                        itemsEN: ['Meta Ads strategy', 'Social media strategy', 'Performance creative']
-                    },
-                    service3: {
-                        titleES: 'Consultoría',
-                        titleEN: 'Consulting',
-                        itemsES: ['Auditorías creativas', 'Restructuración de equipos', 'Procesos creativos eficientes'],
-                        itemsEN: ['Creative audits', 'Team restructuring', 'Efficient creative processes']
-                    }
-                },
-                formspreeId: 'TU_FORM_ID'
-            };
-        }
-
-        // Populate form fields with content
-        function populateFields() {
-            document.getElementById('mainName').value = content.mainName || '';
-            document.getElementById('subtitleES').value = content.subtitleES || '';
-            document.getElementById('subtitleEN').value = content.subtitleEN || '';
-            document.getElementById('taglineES').value = content.taglineES || '';
-            document.getElementById('taglineEN').value = content.taglineEN || '';
-            document.getElementById('formspreeId').value = content.formspreeId || 'TU_FORM_ID';
-            
-            // Evolution
-            if (content.evolution) {
-                document.getElementById('act1TitleES').value = content.evolution.act1.titleES || '';
-                document.getElementById('act1TitleEN').value = content.evolution.act1.titleEN || '';
-                document.getElementById('act1DescES').value = content.evolution.act1.descES || '';
-                document.getElementById('act1DescEN').value = content.evolution.act1.descEN || '';
+        class GitHubPortfolioEditor {
+            constructor() {
+                this.token = localStorage.getItem('github_token');
+                this.repo = localStorage.getItem('github_repo') || 'misterbins/francisco-medina-portfolio';
+                this.autoSaveInterval = null;
+                this.currentLanguage = 'es';
                 
-                document.getElementById('act2TitleES').value = content.evolution.act2.titleES || '';
-                document.getElementById('act2TitleEN').value = content.evolution.act2.titleEN || '';
-                document.getElementById('act2DescES').value = content.evolution.act2.descES || '';
-                document.getElementById('act2DescEN').value = content.evolution.act2.descEN || '';
-                
-                document.getElementById('act3TitleES').value = content.evolution.act3.titleES || '';
-                document.getElementById('act3TitleEN').value = content.evolution.act3.titleEN || '';
-                document.getElementById('act3DescES').value = content.evolution.act3.descES || '';
-                document.getElementById('act3DescEN').value = content.evolution.act3.descEN || '';
+                this.init();
             }
             
-            // Services
-            if (content.services) {
-                document.getElementById('service1TitleES').value = content.services.service1.titleES || '';
-                document.getElementById('service1TitleEN').value = content.services.service1.titleEN || '';
-                document.getElementById('service1ItemsES').value = content.services.service1.itemsES?.join('\n') || '';
-                document.getElementById('service1ItemsEN').value = content.services.service1.itemsEN?.join('\n') || '';
+            init() {
+                this.bindEvents();
                 
-                document.getElementById('service2TitleES').value = content.services.service2.titleES || '';
-                document.getElementById('service2TitleEN').value = content.services.service2.titleEN || '';
-                document.getElementById('service2ItemsES').value = content.services.service2.itemsES?.join('\n') || '';
-                document.getElementById('service2ItemsEN').value = content.services.service2.itemsEN?.join('\n') || '';
-                
-                document.getElementById('service3TitleES').value = content.services.service3.titleES || '';
-                document.getElementById('service3TitleEN').value = content.services.service3.titleEN || '';
-                document.getElementById('service3ItemsES').value = content.services.service3.itemsES?.join('\n') || '';
-                document.getElementById('service3ItemsEN').value = content.services.service3.itemsEN?.join('\n') || '';
+                if (this.token) {
+                    this.showEditor();
+                    this.loadContent();
+                } else {
+                    this.showLogin();
+                }
             }
-        }
-
-        // Setup event listeners for real-time preview
-        function setupEventListeners() {
-            const inputs = document.querySelectorAll('input, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('input', updatePreview);
-            });
-        }
-
-        // Update preview
-        function updatePreview() {
-            // Update basic info
-            document.getElementById('previewName').textContent = document.getElementById('mainName').value;
-            document.getElementById('previewSubtitle').textContent = document.getElementById('subtitleES').value;
-            document.getElementById('previewTagline').textContent = document.getElementById('taglineES').value;
             
-            // Update evolution
-            const evolutionHtml = `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="text-center">
-                        <div class="text-4xl font-light text-gray-400 mb-2">01</div>
-                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act1TitleES').value}</h3>
-                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2009-2012</div>
-                        <p class="text-gray-700">${document.getElementById('act1DescES').value}</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-light text-gray-400 mb-2">02</div>
-                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act2TitleES').value}</h3>
-                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2013-2016</div>
-                        <p class="text-gray-700">${document.getElementById('act2DescES').value}</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-light text-gray-400 mb-2">03</div>
-                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act3TitleES').value}</h3>
-                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2016-presente</div>
-                        <p class="text-gray-700">${document.getElementById('act3DescES').value}</p>
-                    </div>
-                </div>
-            `;
-            document.getElementById('previewEvolution').innerHTML = evolutionHtml;
+            bindEvents() {
+                // Login events
+                document.getElementById('connect-btn').addEventListener('click', () => this.connect());
+                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                
+                // Editor events
+                document.getElementById('save-all').addEventListener('click', () => this.saveAllChanges());
+                document.getElementById('auto-save').addEventListener('change', (e) => this.toggleAutoSave(e.target.checked));
+                document.getElementById('refresh-preview').addEventListener('click', () => this.updatePreview());
+                
+                // Preview language toggle
+                document.getElementById('preview-es').addEventListener('click', () => this.setPreviewLanguage('es'));
+                document.getElementById('preview-en').addEventListener('click', () => this.setPreviewLanguage('en'));
+                
+                // Auto-update preview on input change
+                document.querySelectorAll('.editor-field').forEach(field => {
+                    field.addEventListener('input', () => {
+                        clearTimeout(this.previewTimeout);
+                        this.previewTimeout = setTimeout(() => this.updatePreview(), 1000);
+                    });
+                });
+            }
             
-            // Update services
-            const service1Items = document.getElementById('service1ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
-            const service2Items = document.getElementById('service2ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
-            const service3Items = document.getElementById('service3ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
-            
-            const servicesHtml = `
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service1TitleES').value}</h3>
-                        <ul class="list-none text-gray-700">${service1Items}</ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service2TitleES').value}</h3>
-                        <ul class="list-none text-gray-700">${service2Items}</ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service3TitleES').value}</h3>
-                        <ul class="list-none text-gray-700">${service3Items}</ul>
-                    </div>
-                </div>
-            `;
-            document.getElementById('previewServices').innerHTML = servicesHtml;
-        }
-
-        // Save changes
-        function saveChanges() {
-            // Collect all content
-            content = {
-                mainName: document.getElementById('mainName').value,
-                subtitleES: document.getElementById('subtitleES').value,
-                subtitleEN: document.getElementById('subtitleEN').value,
-                taglineES: document.getElementById('taglineES').value,
-                taglineEN: document.getElementById('taglineEN').value,
-                evolution: {
-                    act1: {
-                        titleES: document.getElementById('act1TitleES').value,
-                        titleEN: document.getElementById('act1TitleEN').value,
-                        descES: document.getElementById('act1DescES').value,
-                        descEN: document.getElementById('act1DescEN').value
-                    },
-                    act2: {
-                        titleES: document.getElementById('act2TitleES').value,
-                        titleEN: document.getElementById('act2TitleEN').value,
-                        descES: document.getElementById('act2DescES').value,
-                        descEN: document.getElementById('act2DescEN').value
-                    },
-                    act3: {
-                        titleES: document.getElementById('act3TitleES').value,
-                        titleEN: document.getElementById('act3TitleEN').value,
-                        descES: document.getElementById('act3DescES').value,
-                        descEN: document.getElementById('act3DescEN').value
+            async connect() {
+                const token = document.getElementById('github-token').value.trim();
+                const repo = document.getElementById('repo-name').value.trim();
+                
+                if (!token || !repo) {
+                    this.showStatus('Por favor completa todos los campos', 'error');
+                    return;
+                }
+                
+                try {
+                    // Test the token
+                    const response = await fetch(`https://api.github.com/repos/${repo}`, {
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('No se pudo acceder al repositorio. Verifica el token y el nombre del repositorio.');
                     }
-                },
-                services: {
-                    service1: {
-                        titleES: document.getElementById('service1TitleES').value,
-                        titleEN: document.getElementById('service1TitleEN').value,
-                        itemsES: document.getElementById('service1ItemsES').value.split('\n').filter(item => item.trim()),
-                        itemsEN: document.getElementById('service1ItemsEN').value.split('\n').filter(item => item.trim())
-                    },
-                    service2: {
-                        titleES: document.getElementById('service2TitleES').value,
-                        titleEN: document.getElementById('service2TitleEN').value,
-                        itemsES: document.getElementById('service2ItemsES').value.split('\n').filter(item => item.trim()),
-                        itemsEN: document.getElementById('service2ItemsEN').value.split('\n').filter(item => item.trim())
-                    },
-                    service3: {
-                        titleES: document.getElementById('service3TitleES').value,
-                        titleEN: document.getElementById('service3TitleEN').value,
-                        itemsES: document.getElementById('service3ItemsES').value.split('\n').filter(item => item.trim()),
-                        itemsEN: document.getElementById('service3ItemsEN').value.split('\n').filter(item => item.trim())
+                    
+                    // Save credentials
+                    localStorage.setItem('github_token', token);
+                    localStorage.setItem('github_repo', repo);
+                    
+                    this.token = token;
+                    this.repo = repo;
+                    
+                    this.showEditor();
+                    await this.loadContent();
+                    
+                    this.showStatus('Conectado exitosamente', 'success');
+                    
+                } catch (error) {
+                    this.showStatus(error.message, 'error');
+                }
+            }
+            
+            logout() {
+                localStorage.removeItem('github_token');
+                localStorage.removeItem('github_repo');
+                this.token = null;
+                this.repo = null;
+                this.showLogin();
+            }
+            
+            showLogin() {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('editor-screen').classList.add('hidden');
+            }
+            
+            showEditor() {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('editor-screen').classList.remove('hidden');
+                document.getElementById('user-info').classList.remove('hidden');
+                
+                // Start auto-save if enabled
+                if (document.getElementById('auto-save').checked) {
+                    this.startAutoSave();
+                }
+            }
+            
+            async loadContent() {
+                try {
+                    const response = await fetch(`https://api.github.com/repos/${this.repo}/contents/index.html`, {
+                        headers: {
+                            'Authorization': `token ${this.token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const content = atob(data.content);
+                        this.parseAndLoadContent(content);
+                        this.showStatus('Contenido cargado exitosamente', 'success');
                     }
-                },
-                formspreeId: document.getElementById('formspreeId').value
-            };
+                    
+                } catch (error) {
+                    this.showStatus('Error al cargar contenido: ' + error.message, 'error');
+                }
+            }
             
-            // Save to localStorage
-            localStorage.setItem('franciscoPortfolioContent', JSON.stringify(content));
+            parseAndLoadContent(html) {
+                // This is a simplified parser - in reality you'd want more robust parsing
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Extract content from the HTML and populate form fields
+                // This is a basic implementation - you'd expand this based on your HTML structure
+                
+                this.updatePreview();
+            }
             
-            // Show saved indicator
-            const indicator = document.getElementById('savedIndicator');
-            indicator.style.display = 'block';
-            setTimeout(() => {
-                indicator.style.display = 'none';
-            }, 2000);
-        }
-
-        // Export HTML
-        function exportHTML() {
-            const formspreeId = document.getElementById('formspreeId').value;
+            async saveAllChanges() {
+                try {
+                    this.showStatus('Guardando cambios...', 'saving');
+                    
+                    const updatedHTML = this.generateUpdatedHTML();
+                    
+                    // Get current file info
+                    const fileResponse = await fetch(`https://api.github.com/repos/${this.repo}/contents/index.html`, {
+                        headers: {
+                            'Authorization': `token ${this.token}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    
+                    const fileData = await fileResponse.json();
+                    
+                    // Update file
+                    const updateResponse = await fetch(`https://api.github.com/repos/${this.repo}/contents/index.html`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${this.token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: 'Actualización del portfolio desde editor',
+                            content: btoa(updatedHTML),
+                            sha: fileData.sha
+                        })
+                    });
+                    
+                    if (updateResponse.ok) {
+                        this.showStatus('Cambios guardados exitosamente', 'success');
+                        const now = new Date().toLocaleString();
+                        document.getElementById('last-save').textContent = `Último guardado: ${now}`;
+                    } else {
+                        throw new Error('Error al guardar cambios');
+                    }
+                    
+                } catch (error) {
+                    this.showStatus('Error al guardar: ' + error.message, 'error');
+                }
+            }
             
-            const htmlTemplate = `<!DOCTYPE html>
+            generateUpdatedHTML() {
+                // Generate the complete HTML with updated content
+                // This would be a comprehensive function that takes all form values
+                // and generates the complete HTML structure
+                
+                const title = document.getElementById('main-title').value;
+                const subtitleES = document.getElementById('subtitle-es').value;
+                const subtitleEN = document.getElementById('subtitle-en').value;
+                
+                // This is a simplified version - you'd want to generate the complete HTML
+                return `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${content.mainName} - Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #1a1a1a;
-            background: #fefefe;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            line-height: 1.1;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            line-height: 1.2;
-            margin-bottom: 2rem;
-        }
-
-        h3 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            line-height: 1.3;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        section {
-            padding: 4rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        section:last-child {
-            border-bottom: none;
-        }
-
-        .language-toggle {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .language-toggle:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 6rem 0;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 3rem;
-            font-weight: 300;
-        }
-
-        .evolution-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin: 3rem 0;
-        }
-
-        .evolution-item {
-            text-align: center;
-        }
-
-        .evolution-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 300;
-            color: #ccc;
-            margin-bottom: 1rem;
-        }
-
-        .evolution-period {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 4rem;
-            margin: 3rem 0;
-        }
-
-        .service-item h3 {
-            border-bottom: 2px solid #1a1a1a;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-item ul {
-            list-style: none;
-        }
-
-        .service-item li {
-            padding: 0.5rem 0;
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .service-item li:before {
-            content: "→ ";
-            color: #1a1a1a;
-            font-weight: bold;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 3rem auto 0;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #eee;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #1a1a1a;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .btn-submit {
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .btn-submit:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
-
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .form-message {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-            display: none;
-        }
-
-        .form-message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .form-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .language-toggle {
-                top: 1rem;
-                right: 1rem;
-            }
-            
-            .services-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .evolution-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-    </style>
+    <title>${title} - Portfolio</title>
+    <!-- Add your complete HTML structure here -->
 </head>
 <body>
-    <button class="language-toggle" onclick="toggleLanguage()">EN</button>
-
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="container">
-            <h1 id="main-title">${content.mainName}</h1>
-            <p class="subtitle" id="main-subtitle">${content.subtitleES}</p>
-            <p id="hero-tagline">${content.taglineES}</p>
-        </div>
-    </section>
-
-    <!-- EVOLUTION SECTION -->
-    <section id="evolution-section">
-        <div class="container">
-            <h2 id="evolution-title">La Evolución</h2>
-            
-            <div class="evolution-grid">
-                <div class="evolution-item">
-                    <div class="evolution-number">01</div>
-                    <h3 id="act1-title">${content.evolution.act1.titleES}</h3>
-                    <div class="evolution-period">2009-2012</div>
-                    <p id="act1-desc">${content.evolution.act1.descES}</p>
-                </div>
-                
-                <div class="evolution-item">
-                    <div class="evolution-number">02</div>
-                    <h3 id="act2-title">${content.evolution.act2.titleES}</h3>
-                    <div class="evolution-period">2013-2016</div>
-                    <p id="act2-desc">${content.evolution.act2.descES}</p>
-                </div>
-                
-                <div class="evolution-item">
-                    <div class="evolution-number">03</div>
-                    <h3 id="act3-title">${content.evolution.act3.titleES}</h3>
-                    <div class="evolution-period">2016-presente</div>
-                    <p id="act3-desc">${content.evolution.act3.descES}</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SERVICES SECTION -->
-    <section id="services-section">
-        <div class="container">
-            <h2 id="services-title">Servicios</h2>
-            
-            <div class="services-grid">
-                <div class="service-item">
-                    <h3 id="service1-title">${content.services.service1.titleES}</h3>
-                    <ul>
-                        ${content.services.service1.itemsES.map(item => `<li id="service1-item">${item}</li>`).join('')}
-                    </ul>
-                </div>
-                
-                <div class="service-item">
-                    <h3 id="service2-title">${content.services.service2.titleES}</h3>
-                    <ul>
-                        ${content.services.service2.itemsES.map(item => `<li id="service2-item">${item}</li>`).join('')}
-                    </ul>
-                </div>
-                
-                <div class="service-item">
-                    <h3 id="service3-title">${content.services.service3.titleES}</h3>
-                    <ul>
-                        ${content.services.service3.itemsES.map(item => `<li id="service3-item">${item}</li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section id="contact-section">
-        <div class="container">
-            <h2 id="contact-title">Conversemos</h2>
-            
-            <form class="contact-form" action="https://formspree.io/f/${formspreeId}" method="POST">
-                <div class="form-group">
-                    <label for="name" id="label-name">Nombre completo</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" id="label-email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone" id="label-phone">WhatsApp</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                
-                <div class="form-group">
-                    <label for="message" id="label-message">Mensaje</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                
-                <button type="submit" class="btn-submit" id="submit-btn">Enviar Mensaje</button>
-                
-                <div id="form-message" class="form-message"></div>
-            </form>
-        </div>
-    </section>
-
-    <script>
-        let currentLang = 'es';
-        
-        const translations = {
-            es: {
-                'main-subtitle': '${content.subtitleES}',
-                'hero-tagline': '${content.taglineES}',
-                'evolution-title': 'La Evolución',
-                'act1-title': '${content.evolution.act1.titleES}',
-                'act1-desc': '${content.evolution.act1.descES}',
-                'act2-title': '${content.evolution.act2.titleES}',
-                'act2-desc': '${content.evolution.act2.descES}',
-                'act3-title': '${content.evolution.act3.titleES}',
-                'act3-desc': '${content.evolution.act3.descES}',
-                'services-title': 'Servicios',
-                'service1-title': '${content.services.service1.titleES}',
-                'service2-title': '${content.services.service2.titleES}',
-                'service3-title': '${content.services.service3.titleES}',
-                'contact-title': 'Conversemos',
-                'label-name': 'Nombre completo',
-                'label-email': 'Email',
-                'label-phone': 'WhatsApp',
-                'label-message': 'Mensaje',
-                'submit-btn': 'Enviar Mensaje'
-            },
-            en: {
-                'main-subtitle': '${content.subtitleEN}',
-                'hero-tagline': '${content.taglineEN}',
-                'evolution-title': 'The Evolution',
-                'act1-title': '${content.evolution.act1.titleEN}',
-                'act1-desc': '${content.evolution.act1.descEN}',
-                'act2-title': '${content.evolution.act2.titleEN}',
-                'act2-desc': '${content.evolution.act2.descEN}',
-                'act3-title': '${content.evolution.act3.titleEN}',
-                'act3-desc': '${content.evolution.act3.descEN}',
-                'services-title': 'Services',
-                'service1-title': '${content.services.service1.titleEN}',
-                'service2-title': '${content.services.service2.titleEN}',
-                'service3-title': '${content.services.service3.titleEN}',
-                'contact-title': "Let's Talk",
-                'label-name': 'Full name',
-                'label-email': 'Email',
-                'label-phone': 'WhatsApp',
-                'label-message': 'Message',
-                'submit-btn': 'Send Message'
-            }
-        };
-
-        function toggleLanguage() {
-            const newLang = currentLang === 'es' ? 'en' : 'es';
-            const toggleBtn = document.querySelector('.language-toggle');
-            
-            toggleBtn.textContent = newLang === 'es' ? 'EN' : 'ES';
-            
-            Object.keys(translations[newLang]).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.textContent = translations[newLang][key];
-                }
-            });
-            
-            currentLang = newLang;
-        }
-
-        // Form handling
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const submitBtn = document.getElementById('submit-btn');
-            const messageDiv = document.getElementById('form-message');
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
-            
-            // Let Formspree handle the form submission
-        });
-    </script>
+    <h1>${title}</h1>
+    <p class="subtitle-es">${subtitleES}</p>
+    <p class="subtitle-en hidden">${subtitleEN}</p>
+    <!-- Add complete portfolio structure -->
 </body>
 </html>`;
-
-            // Create download
-            const blob = new Blob([htmlTemplate], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'francisco-medina-portfolio.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            }
+            
+            updatePreview() {
+                const previewContent = this.generatePreviewContent();
+                document.getElementById('preview-frame').innerHTML = previewContent;
+            }
+            
+            generatePreviewContent() {
+                const title = document.getElementById('main-title').value || 'Francisco Medina';
+                const subtitle = this.currentLanguage === 'es' 
+                    ? (document.getElementById('subtitle-es').value || 'Senior Copywriter - Director Creativo')
+                    : (document.getElementById('subtitle-en').value || 'Senior Copywriter - Creative Director');
+                
+                return `
+                    <div style="font-family: 'Playfair Display', serif; text-align: center; padding: 2rem;">
+                        <h1 style="font-size: 3rem; margin-bottom: 1rem; color: #1a1a1a;">${title}</h1>
+                        <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">${subtitle}</p>
+                        <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+                            <h2 style="font-size: 2rem; margin: 2rem 0 1rem 0;">Vista Previa Simplificada</h2>
+                            <p>Esta es una vista previa básica de tus cambios. El sitio real tendrá el diseño completo una vez guardado.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            setPreviewLanguage(lang) {
+                this.currentLanguage = lang;
+                
+                // Update button states
+                document.getElementById('preview-es').className = lang === 'es' 
+                    ? 'bg-blue-600 text-white px-3 py-1 rounded text-sm'
+                    : 'bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm';
+                    
+                document.getElementById('preview-en').className = lang === 'en'
+                    ? 'bg-blue-600 text-white px-3 py-1 rounded text-sm'
+                    : 'bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm';
+                
+                this.updatePreview();
+            }
+            
+            toggleAutoSave(enabled) {
+                if (enabled) {
+                    this.startAutoSave();
+                } else {
+                    this.stopAutoSave();
+                }
+            }
+            
+            startAutoSave() {
+                this.stopAutoSave(); // Clear any existing interval
+                this.autoSaveInterval = setInterval(() => {
+                    this.saveAllChanges();
+                }, 30000); // Save every 30 seconds
+            }
+            
+            stopAutoSave() {
+                if (this.autoSaveInterval) {
+                    clearInterval(this.autoSaveInterval);
+                    this.autoSaveInterval = null;
+                }
+            }
+            
+            showStatus(message, type = 'info') {
+                const statusText = document.getElementById('status-text');
+                const statusBar = document.getElementById('status-bar');
+                
+                statusText.textContent = message;
+                
+                // Remove existing classes
+                statusBar.className = 'border-b px-4 py-2';
+                statusText.className = 'text-sm font-medium';
+                
+                // Add type-specific classes
+                switch (type) {
+                    case 'success':
+                        statusBar.classList.add('bg-green-50');
+                        statusText.classList.add('text-green-600');
+                        break;
+                    case 'error':
+                        statusBar.classList.add('bg-red-50');
+                        statusText.classList.add('text-red-600');
+                        break;
+                    case 'saving':
+                        statusBar.classList.add('bg-yellow-50');
+                        statusText.classList.add('text-yellow-600', 'saving');
+                        break;
+                    default:
+                        statusBar.classList.add('bg-blue-50');
+                        statusText.classList.add('text-blue-600');
+                }
+                
+                // Auto-clear status after 5 seconds (except for saving)
+                if (type !== 'saving') {
+                    setTimeout(() => {
+                        statusText.textContent = 'Conectado';
+                        statusBar.className = 'bg-blue-50 border-b px-4 py-2';
+                        statusText.className = 'text-sm font-medium text-green-600';
+                    }, 5000);
+                }
+            }
         }
+        
+        // Initialize the editor when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new GitHubPortfolioEditor();
+        });
     </script>
 </body>
 </html>
