@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Francisco Medina - Director Creativo</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     
     <style>
         * {
@@ -85,6 +86,28 @@
 
         .language-toggle:hover {
             background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Admin Toggle */
+        .admin-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 6rem;
+            z-index: 1000;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-toggle:hover {
+            background: #c0392b;
             transform: translateY(-2px);
         }
 
@@ -241,41 +264,134 @@
             transform: translateY(-2px);
         }
 
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            display: none;
+            overflow: auto;
         }
 
-        .form-message {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
+        .admin-content {
+            background: white;
+            margin: 2rem;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 2rem auto;
         }
 
-        .form-message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .form-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .form-note {
-            background: #e7f3ff;
-            border: 1px solid #b8daff;
-            color: #004085;
-            padding: 1rem;
-            border-radius: 8px;
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            font-size: 0.9rem;
-            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .admin-section h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .admin-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-btn:hover {
+            background: #c0392b;
+        }
+
+        .admin-btn.secondary {
+            background: #95a5a6;
+        }
+
+        .admin-btn.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .lang-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .lang-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .lang-tab.active {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .editable {
+            position: relative;
+        }
+
+        .edit-overlay {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .admin-mode .editable:hover .edit-overlay {
+            opacity: 1;
         }
 
         /* Responsive */
@@ -289,6 +405,11 @@
                 right: 1rem;
             }
             
+            .admin-toggle {
+                top: 1rem;
+                right: 5rem;
+            }
+            
             .services-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -298,16 +419,73 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
+
+            .admin-content {
+                margin: 1rem;
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <button class="language-toggle" onclick="toggleLanguage()">EN</button>
+    <button class="admin-toggle" onclick="toggleAdmin()"><i class="fas fa-edit"></i></button>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Panel de Administración</h2>
+                <button class="admin-btn secondary" onclick="closeAdmin()">Cerrar</button>
+            </div>
+
+            <div class="admin-section">
+                <h3>Información Principal</h3>
+                <div class="lang-tabs">
+                    <div class="lang-tab active" data-lang="es">Español</div>
+                    <div class="lang-tab" data-lang="en">English</div>
+                </div>
+                <div class="lang-content" data-lang="es">
+                    <input type="text" class="admin-input" id="heroTitle_es" placeholder="Título principal">
+                    <input type="text" class="admin-input" id="heroSubtitle_es" placeholder="Subtítulo">
+                    <textarea class="admin-textarea" id="heroTagline_es" placeholder="Tagline"></textarea>
+                </div>
+                <div class="lang-content hidden" data-lang="en">
+                    <input type="text" class="admin-input" id="heroTitle_en" placeholder="Main title">
+                    <input type="text" class="admin-input" id="heroSubtitle_en" placeholder="Subtitle">
+                    <textarea class="admin-textarea" id="heroTagline_en" placeholder="Tagline"></textarea>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h3>Evolución (3 Actos)</h3>
+                <div id="evolutionEditor"></div>
+            </div>
+
+            <div class="admin-section">
+                <h3>Servicios</h3>
+                <div id="servicesEditor"></div>
+            </div>
+
+            <div class="admin-section">
+                <h3>Casos de Estudio</h3>
+                <div id="casesEditor"></div>
+            </div>
+
+            <div class="admin-section">
+                <h3>Información de Contacto</h3>
+                <input type="text" class="admin-input" id="formspreeId" placeholder="Formspree Form ID (ej: xzbqwrxy)">
+            </div>
+
+            <button class="admin-btn" onclick="saveContent()">Guardar Cambios</button>
+            <button class="admin-btn secondary" onclick="resetContent()">Restaurar Original</button>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="container">
-            <h1>Francisco Medina</h1>
+            <h1 id="main-title">Francisco Medina</h1>
             <p class="subtitle" id="main-subtitle">Senior Copywriter - Director Creativo</p>
             <p id="hero-tagline">De redactor a director: Creatividad con visión estratégica</p>
         </div>
@@ -318,27 +496,8 @@
         <div class="container">
             <h2 id="evolution-title">La Evolución</h2>
             
-            <div class="evolution-grid">
-                <div class="evolution-item">
-                    <div class="evolution-number">01</div>
-                    <h3 id="act1-title">El Redactor</h3>
-                    <div class="evolution-period">2009-2012</div>
-                    <p id="act1-desc">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</p>
-                </div>
-                
-                <div class="evolution-item">
-                    <div class="evolution-number">02</div>
-                    <h3 id="act2-title">El Estratega</h3>
-                    <div class="evolution-period">2013-2016</div>
-                    <p id="act2-desc">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</p>
-                </div>
-                
-                <div class="evolution-item">
-                    <div class="evolution-number">03</div>
-                    <h3 id="act3-title">El Director</h3>
-                    <div class="evolution-period">2016-presente</div>
-                    <p id="act3-desc">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</p>
-                </div>
+            <div class="evolution-grid" id="evolutionGrid">
+                <!-- Content will be loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -348,33 +507,8 @@
         <div class="container">
             <h2 id="services-title">Servicios</h2>
             
-            <div class="services-grid">
-                <div class="service-item">
-                    <h3 id="service1-title">Dirección Creativa</h3>
-                    <ul>
-                        <li id="service1-item1">Desarrollo de conceptos que venden</li>
-                        <li id="service1-item2">Liderazgo de equipos creativos</li>
-                        <li id="service1-item3">Supervisión de campañas 360°</li>
-                    </ul>
-                </div>
-                
-                <div class="service-item">
-                    <h3 id="service2-title">Estrategia Digital</h3>
-                    <ul>
-                        <li id="service2-item1">Meta Ads strategy</li>
-                        <li id="service2-item2">Social media strategy</li>
-                        <li id="service2-item3">Performance creative</li>
-                    </ul>
-                </div>
-                
-                <div class="service-item">
-                    <h3 id="service3-title">Consultoría</h3>
-                    <ul>
-                        <li id="service3-item1">Auditorías creativas</li>
-                        <li id="service3-item2">Restructuración de equipos</li>
-                        <li id="service3-item3">Procesos creativos eficientes</li>
-                    </ul>
-                </div>
+            <div class="services-grid" id="servicesGrid">
+                <!-- Content will be loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -384,24 +518,8 @@
         <div class="container">
             <h2 id="cases-title">Casos Destacados</h2>
             
-            <div class="cases-grid">
-                <div class="case-item">
-                    <h3 id="case1-title">Cencosud Digital</h3>
-                    <p id="case1-desc">Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.</p>
-                    <p class="case-result" id="case1-result">Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile</p>
-                </div>
-                
-                <div class="case-item">
-                    <h3 id="case2-title">Advertising Not Dead</h3>
-                    <p id="case2-desc">Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.</p>
-                    <p class="case-result" id="case2-result">Resultado: 8+ años de liderazgo creativo exitoso</p>
-                </div>
-                
-                <div class="case-item">
-                    <h3 id="case3-title">SientoCuarenta</h3>
-                    <p id="case3-desc">Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.</p>
-                    <p class="case-result" id="case3-result">Resultado: Proyecto creativo independiente exitoso 2012-2014</p>
-                </div>
+            <div class="cases-grid" id="casesGrid">
+                <!-- Content will be loaded by JavaScript -->
             </div>
         </div>
     </section>
@@ -411,11 +529,7 @@
         <div class="container">
             <h2 id="contact-title">Conversemos</h2>
             
-            <div class="form-note" id="form-note">
-                📧 Este formulario está configurado con Formspree para garantizar que tus mensajes lleguen directamente a mi email. ¡Funciona de forma confiable!
-            </div>
-            
-            <form class="contact-form" action="https://formspree.io/f/xgvzlbvo" method="POST">
+            <form class="contact-form" id="contactForm" method="POST">
                 <div class="form-group">
                     <label for="name" id="label-name">Nombre completo</label>
                     <input type="text" id="name" name="name" required>
@@ -442,45 +556,178 @@
     </section>
 
     <script>
-        // Language toggle functionality
+        // Default content
+        const defaultContent = {
+            hero: {
+                es: {
+                    title: "Francisco Medina",
+                    subtitle: "Senior Copywriter - Director Creativo",
+                    tagline: "De redactor a director: Creatividad con visión estratégica"
+                },
+                en: {
+                    title: "Francisco Medina",
+                    subtitle: "Senior Copywriter - Creative Director",
+                    tagline: "From copywriter to director: Creativity with strategic vision"
+                }
+            },
+            evolution: {
+                title: {
+                    es: "La Evolución",
+                    en: "The Evolution"
+                },
+                acts: [
+                    {
+                        number: "01",
+                        period: "2009-2012",
+                        title: {
+                            es: "El Redactor",
+                            en: "The Copywriter"
+                        },
+                        description: {
+                            es: "Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.",
+                            en: "I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences."
+                        }
+                    },
+                    {
+                        number: "02",
+                        period: "2013-2016",
+                        title: {
+                            es: "El Estratega",
+                            en: "The Strategist"
+                        },
+                        description: {
+                            es: "Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.",
+                            en: "Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece."
+                        }
+                    },
+                    {
+                        number: "03",
+                        period: "2016-presente",
+                        title: {
+                            es: "El Director",
+                            en: "The Director"
+                        },
+                        description: {
+                            es: "Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.",
+                            en: "Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life."
+                        }
+                    }
+                ]
+            },
+            services: {
+                title: {
+                    es: "Servicios",
+                    en: "Services"
+                },
+                items: [
+                    {
+                        title: {
+                            es: "Dirección Creativa",
+                            en: "Creative Direction"
+                        },
+                        items: {
+                            es: [
+                                "Desarrollo de conceptos que venden",
+                                "Liderazgo de equipos creativos",
+                                "Supervisión de campañas 360°"
+                            ],
+                            en: [
+                                "Development of concepts that sell",
+                                "Creative team leadership",
+                                "360° campaign supervision"
+                            ]
+                        }
+                    },
+                    {
+                        title: {
+                            es: "Estrategia Digital",
+                            en: "Digital Strategy"
+                        },
+                        items: {
+                            es: [
+                                "Meta Ads strategy",
+                                "Social media strategy",
+                                "Performance creative"
+                            ],
+                            en: [
+                                "Meta Ads strategy",
+                                "Social media strategy",
+                                "Performance creative"
+                            ]
+                        }
+                    },
+                    {
+                        title: {
+                            es: "Consultoría",
+                            en: "Consulting"
+                        },
+                        items: {
+                            es: [
+                                "Auditorías creativas",
+                                "Restructuración de equipos",
+                                "Procesos creativos eficientes"
+                            ],
+                            en: [
+                                "Creative audits",
+                                "Team restructuring",
+                                "Efficient creative processes"
+                            ]
+                        }
+                    }
+                ]
+            },
+            cases: {
+                title: {
+                    es: "Casos Destacados",
+                    en: "Featured Cases"
+                },
+                items: [
+                    {
+                        title: "Cencosud Digital",
+                        description: {
+                            es: "Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.",
+                            en: "Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively."
+                        },
+                        result: {
+                            es: "Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile",
+                            en: "Result: Successful digital campaigns for Chile's largest retail group"
+                        }
+                    },
+                    {
+                        title: "Advertising Not Dead",
+                        description: {
+                            es: "Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.",
+                            en: "As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity."
+                        },
+                        result: {
+                            es: "Resultado: 8+ años de liderazgo creativo exitoso",
+                            en: "Result: 8+ years of successful creative leadership"
+                        }
+                    },
+                    {
+                        title: "SientoCuarenta",
+                        description: {
+                            es: "Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.",
+                            en: "Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine."
+                        },
+                        result: {
+                            es: "Resultado: Proyecto creativo independiente exitoso 2012-2014",
+                            en: "Result: Successful independent creative project 2012-2014"
+                        }
+                    }
+                ]
+            },
+            contact: {
+                formspreeId: "TU_FORM_ID"
+            }
+        };
+
+        // Language functionality
         let currentLang = 'es';
         
         const translations = {
             es: {
-                'main-subtitle': 'Senior Copywriter - Director Creativo',
-                'hero-tagline': 'De redactor a director: Creatividad con visión estratégica',
-                'evolution-title': 'La Evolución',
-                'act1-title': 'El Redactor',
-                'act1-desc': 'Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.',
-                'act2-title': 'El Estratega',
-                'act2-desc': 'Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.',
-                'act3-title': 'El Director',
-                'act3-desc': 'Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.',
-                'services-title': 'Servicios',
-                'service1-title': 'Dirección Creativa',
-                'service1-item1': 'Desarrollo de conceptos que venden',
-                'service1-item2': 'Liderazgo de equipos creativos',
-                'service1-item3': 'Supervisión de campañas 360°',
-                'service2-title': 'Estrategia Digital',
-                'service2-item1': 'Meta Ads strategy',
-                'service2-item2': 'Social media strategy',
-                'service2-item3': 'Performance creative',
-                'service3-title': 'Consultoría',
-                'service3-item1': 'Auditorías creativas',
-                'service3-item2': 'Restructuración de equipos',
-                'service3-item3': 'Procesos creativos eficientes',
-                'cases-title': 'Casos Destacados',
-                'case1-title': 'Cencosud Digital',
-                'case1-desc': 'Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.',
-                'case1-result': 'Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile',
-                'case2-title': 'Advertising Not Dead',
-                'case2-desc': 'Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.',
-                'case2-result': 'Resultado: 8+ años de liderazgo creativo exitoso',
-                'case3-title': 'SientoCuarenta',
-                'case3-desc': 'Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.',
-                'case3-result': 'Resultado: Proyecto creativo independiente exitoso 2012-2014',
                 'contact-title': 'Conversemos',
-                'form-note': '📧 Este formulario está configurado con Formspree para garantizar que tus mensajes lleguen directamente a mi email. ¡Funciona de forma confiable!',
                 'label-name': 'Nombre completo',
                 'label-email': 'Email',
                 'label-phone': 'WhatsApp',
@@ -488,40 +735,7 @@
                 'submit-btn': 'Enviar Mensaje'
             },
             en: {
-                'main-subtitle': 'Senior Copywriter - Creative Director',
-                'hero-tagline': 'From copywriter to director: Creativity with strategic vision',
-                'evolution-title': 'The Evolution',
-                'act1-title': 'The Copywriter',
-                'act1-desc': 'I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.',
-                'act2-title': 'The Strategist',
-                'act2-desc': 'Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.',
-                'act3-title': 'The Director',
-                'act3-desc': 'Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.',
-                'services-title': 'Services',
-                'service1-title': 'Creative Direction',
-                'service1-item1': 'Development of concepts that sell',
-                'service1-item2': 'Creative team leadership',
-                'service1-item3': '360° campaign supervision',
-                'service2-title': 'Digital Strategy',
-                'service2-item1': 'Meta Ads strategy',
-                'service2-item2': 'Social media strategy',
-                'service2-item3': 'Performance creative',
-                'service3-title': 'Consulting',
-                'service3-item1': 'Creative audits',
-                'service3-item2': 'Team restructuring',
-                'service3-item3': 'Efficient creative processes',
-                'cases-title': 'Featured Cases',
-                'case1-title': 'Cencosud Digital',
-                'case1-desc': 'Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively.',
-                'case1-result': 'Result: Successful digital campaigns for Chile\'s largest retail group',
-                'case2-title': 'Advertising Not Dead',
-                'case2-desc': 'As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity.',
-                'case2-result': 'Result: 8+ years of successful creative leadership',
-                'case3-title': 'SientoCuarenta',
-                'case3-desc': 'Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine.',
-                'case3-result': 'Result: Successful independent creative project 2012-2014',
-                'contact-title': 'Let\'s Talk',
-                'form-note': '📧 This form is configured with Formspree to ensure your messages reach my email directly. It works reliably!',
+                'contact-title': "Let's Talk",
                 'label-name': 'Full name',
                 'label-email': 'Email',
                 'label-phone': 'WhatsApp',
@@ -534,10 +748,9 @@
             const newLang = currentLang === 'es' ? 'en' : 'es';
             const toggleBtn = document.querySelector('.language-toggle');
             
-            // Update toggle button
             toggleBtn.textContent = newLang === 'es' ? 'EN' : 'ES';
             
-            // Update all translatable elements
+            // Update static translations
             Object.keys(translations[newLang]).forEach(key => {
                 const element = document.getElementById(key);
                 if (element) {
@@ -546,7 +759,269 @@
             });
             
             currentLang = newLang;
+            loadContent();
         }
+
+        // Admin functionality
+        function toggleAdmin() {
+            const adminPanel = document.getElementById('adminPanel');
+            adminPanel.style.display = adminPanel.style.display === 'block' ? 'none' : 'block';
+            if (adminPanel.style.display === 'block') {
+                loadAdminContent();
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function loadAdminContent() {
+            const content = getContent();
+            
+            // Load hero content
+            document.getElementById('heroTitle_es').value = content.hero.es.title;
+            document.getElementById('heroTitle_en').value = content.hero.en.title;
+            document.getElementById('heroSubtitle_es').value = content.hero.es.subtitle;
+            document.getElementById('heroSubtitle_en').value = content.hero.en.subtitle;
+            document.getElementById('heroTagline_es').value = content.hero.es.tagline;
+            document.getElementById('heroTagline_en').value = content.hero.en.tagline;
+            
+            document.getElementById('formspreeId').value = content.contact.formspreeId;
+
+            // Load evolution editor
+            loadEvolutionEditor(content);
+            loadServicesEditor(content);
+            loadCasesEditor(content);
+        }
+
+        function loadEvolutionEditor(content) {
+            const container = document.getElementById('evolutionEditor');
+            let html = '';
+            
+            content.evolution.acts.forEach((act, index) => {
+                html += `
+                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <h4>Acto ${act.number}</h4>
+                        <input type="text" class="admin-input" id="actPeriod_${index}" value="${act.period}" placeholder="Período">
+                        <input type="text" class="admin-input" id="actTitle_es_${index}" value="${act.title.es}" placeholder="Título (ES)">
+                        <input type="text" class="admin-input" id="actTitle_en_${index}" value="${act.title.en}" placeholder="Título (EN)">
+                        <textarea class="admin-textarea" id="actDesc_es_${index}" placeholder="Descripción (ES)">${act.description.es}</textarea>
+                        <textarea class="admin-textarea" id="actDesc_en_${index}" placeholder="Descripción (EN)">${act.description.en}</textarea>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function loadServicesEditor(content) {
+            const container = document.getElementById('servicesEditor');
+            let html = '';
+            
+            content.services.items.forEach((service, index) => {
+                html += `
+                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <h4>Servicio ${index + 1}</h4>
+                        <input type="text" class="admin-input" id="serviceTitle_es_${index}" value="${service.title.es}" placeholder="Título del servicio (ES)">
+                        <input type="text" class="admin-input" id="serviceTitle_en_${index}" value="${service.title.en}" placeholder="Título del servicio (EN)">
+                        <textarea class="admin-textarea" id="serviceItems_es_${index}" placeholder="Items del servicio (ES) - uno por línea">${service.items.es.join('\n')}</textarea>
+                        <textarea class="admin-textarea" id="serviceItems_en_${index}" placeholder="Items del servicio (EN) - uno por línea">${service.items.en.join('\n')}</textarea>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function loadCasesEditor(content) {
+            const container = document.getElementById('casesEditor');
+            let html = '';
+            
+            content.cases.items.forEach((caseItem, index) => {
+                html += `
+                    <div style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                        <h4>Caso ${index + 1}</h4>
+                        <input type="text" class="admin-input" id="caseTitle_${index}" value="${caseItem.title}" placeholder="Título del caso">
+                        <textarea class="admin-textarea" id="caseDesc_es_${index}" placeholder="Descripción (ES)">${caseItem.description.es}</textarea>
+                        <textarea class="admin-textarea" id="caseDesc_en_${index}" placeholder="Descripción (EN)">${caseItem.description.en}</textarea>
+                        <textarea class="admin-textarea" id="caseResult_es_${index}" placeholder="Resultado (ES)">${caseItem.result.es}</textarea>
+                        <textarea class="admin-textarea" id="caseResult_en_${index}" placeholder="Resultado (EN)">${caseItem.result.en}</textarea>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function saveContent() {
+            const content = getContent();
+            
+            // Save hero content
+            content.hero.es.title = document.getElementById('heroTitle_es').value;
+            content.hero.en.title = document.getElementById('heroTitle_en').value;
+            content.hero.es.subtitle = document.getElementById('heroSubtitle_es').value;
+            content.hero.en.subtitle = document.getElementById('heroSubtitle_en').value;
+            content.hero.es.tagline = document.getElementById('heroTagline_es').value;
+            content.hero.en.tagline = document.getElementById('heroTagline_en').value;
+            
+            // Save evolution content
+            content.evolution.acts.forEach((act, index) => {
+                act.period = document.getElementById(`actPeriod_${index}`).value;
+                act.title.es = document.getElementById(`actTitle_es_${index}`).value;
+                act.title.en = document.getElementById(`actTitle_en_${index}`).value;
+                act.description.es = document.getElementById(`actDesc_es_${index}`).value;
+                act.description.en = document.getElementById(`actDesc_en_${index}`).value;
+            });
+            
+            // Save services content
+            content.services.items.forEach((service, index) => {
+                service.title.es = document.getElementById(`serviceTitle_es_${index}`).value;
+                service.title.en = document.getElementById(`serviceTitle_en_${index}`).value;
+                service.items.es = document.getElementById(`serviceItems_es_${index}`).value.split('\n').filter(item => item.trim());
+                service.items.en = document.getElementById(`serviceItems_en_${index}`).value.split('\n').filter(item => item.trim());
+            });
+            
+            // Save cases content
+            content.cases.items.forEach((caseItem, index) => {
+                caseItem.title = document.getElementById(`caseTitle_${index}`).value;
+                caseItem.description.es = document.getElementById(`caseDesc_es_${index}`).value;
+                caseItem.description.en = document.getElementById(`caseDesc_en_${index}`).value;
+                caseItem.result.es = document.getElementById(`caseResult_es_${index}`).value;
+                caseItem.result.en = document.getElementById(`caseResult_en_${index}`).value;
+            });
+            
+            // Save contact content
+            content.contact.formspreeId = document.getElementById('formspreeId').value;
+            
+            localStorage.setItem('portfolioContent', JSON.stringify(content));
+            loadContent();
+            closeAdmin();
+            alert('Contenido guardado exitosamente!');
+        }
+
+        function resetContent() {
+            if (confirm('¿Estás seguro de que quieres restaurar el contenido original?')) {
+                localStorage.removeItem('portfolioContent');
+                loadContent();
+                closeAdmin();
+                alert('Contenido restaurado al original.');
+            }
+        }
+
+        function getContent() {
+            const saved = localStorage.getItem('portfolioContent');
+            return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultContent));
+        }
+
+        function loadContent() {
+            const content = getContent();
+            
+            // Load hero content
+            document.getElementById('main-title').textContent = content.hero[currentLang].title;
+            document.getElementById('main-subtitle').textContent = content.hero[currentLang].subtitle;
+            document.getElementById('hero-tagline').textContent = content.hero[currentLang].tagline;
+            
+            // Load evolution content
+            document.getElementById('evolution-title').textContent = content.evolution.title[currentLang];
+            loadEvolutionContent(content);
+            
+            // Load services content
+            document.getElementById('services-title').textContent = content.services.title[currentLang];
+            loadServicesContent(content);
+            
+            // Load cases content
+            document.getElementById('cases-title').textContent = content.cases.title[currentLang];
+            loadCasesContent(content);
+            
+            // Update form action
+            updateFormAction(content.contact.formspreeId);
+        }
+
+        function loadEvolutionContent(content) {
+            const container = document.getElementById('evolutionGrid');
+            let html = '';
+            
+            content.evolution.acts.forEach(act => {
+                html += `
+                    <div class="evolution-item">
+                        <div class="evolution-number">${act.number}</div>
+                        <h3>${act.title[currentLang]}</h3>
+                        <div class="evolution-period">${act.period}</div>
+                        <p>${act.description[currentLang]}</p>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function loadServicesContent(content) {
+            const container = document.getElementById('servicesGrid');
+            let html = '';
+            
+            content.services.items.forEach(service => {
+                html += `
+                    <div class="service-item">
+                        <h3>${service.title[currentLang]}</h3>
+                        <ul>
+                            ${service.items[currentLang].map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function loadCasesContent(content) {
+            const container = document.getElementById('casesGrid');
+            let html = '';
+            
+            content.cases.items.forEach(caseItem => {
+                html += `
+                    <div class="case-item">
+                        <h3>${caseItem.title}</h3>
+                        <p>${caseItem.description[currentLang]}</p>
+                        <p class="case-result">${caseItem.result[currentLang]}</p>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function updateFormAction(formspreeId) {
+            const form = document.getElementById('contactForm');
+            if (formspreeId && formspreeId !== 'TU_FORM_ID') {
+                form.action = `https://formspree.io/f/${formspreeId}`;
+            }
+        }
+
+        // Language tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial content
+            loadContent();
+            
+            // Language tabs in admin
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('lang-tab')) {
+                    const lang = e.target.dataset.lang;
+                    
+                    // Update tab active state
+                    document.querySelectorAll('.lang-tab').forEach(tab => tab.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    // Show/hide content
+                    document.querySelectorAll('.lang-content').forEach(content => {
+                        if (content.dataset.lang === lang) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
