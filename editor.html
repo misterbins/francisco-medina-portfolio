@@ -6,640 +6,613 @@
     <title>Francisco Medina - Editor de Contenido</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .editor-section {
+            transition: all 0.3s ease;
+        }
+        .editor-section:hover {
+            background-color: #f8fafc;
+        }
+        .preview-container {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        .preview-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .preview-section {
+            padding: 2rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .saved-indicator {
+            display: none;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-inter">
-    <div class="min-h-screen">
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <header class="bg-white shadow-sm border-b">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center">
-                            <span class="text-white font-bold text-sm">FM</span>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold text-gray-900">Editor de Portfolio</h1>
-                            <p class="text-sm text-gray-600">Francisco Medina</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <button id="previewBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                            <i class="fas fa-eye mr-2"></i>Vista Previa
-                        </button>
-                        <button id="exportBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                            <i class="fas fa-download mr-2"></i>Exportar HTML
-                        </button>
-                    </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                        <i class="fas fa-edit text-blue-600 mr-2"></i>
+                        Editor de Contenido - Francisco Medina
+                    </h1>
+                    <p class="text-gray-600">Edita el contenido de tu portfolio y exporta los cambios</p>
                 </div>
-            </div>
-        </header>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Editor Panel -->
-                <div class="space-y-6">
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                            <i class="fas fa-user-circle mr-2 text-blue-600"></i>Información Personal
-                        </h2>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
-                                <input type="text" id="fullName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Francisco Medina">
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (ES)</label>
-                                    <input type="text" id="subtitleEs" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Senior Copywriter - Director Creativo">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (EN)</label>
-                                    <input type="text" id="subtitleEn" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Senior Copywriter - Creative Director">
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (ES)</label>
-                                    <textarea id="taglineEs" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">De redactor a director: Creatividad con visión estratégica</textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (EN)</label>
-                                    <textarea id="taglineEn" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">From copywriter to director: Creativity with strategic vision</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Evolution Section -->
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                            <i class="fas fa-chart-line mr-2 text-green-600"></i>La Evolución
-                        </h2>
-                        
-                        <div id="evolutionContainer" class="space-y-4">
-                            <!-- Evolution acts will be dynamically generated -->
-                        </div>
-                        
-                        <button id="addEvolutionBtn" class="mt-4 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm">
-                            <i class="fas fa-plus mr-2"></i>Agregar Acto
-                        </button>
-                    </div>
-
-                    <!-- Services Section -->
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                            <i class="fas fa-briefcase mr-2 text-purple-600"></i>Servicios
-                        </h2>
-                        
-                        <div id="servicesContainer" class="space-y-4">
-                            <!-- Services will be dynamically generated -->
-                        </div>
-                        
-                        <button id="addServiceBtn" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-md text-sm">
-                            <i class="fas fa-plus mr-2"></i>Agregar Servicio
-                        </button>
-                    </div>
-
-                    <!-- Case Studies Section -->
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                            <i class="fas fa-star mr-2 text-yellow-600"></i>Casos Destacados
-                        </h2>
-                        
-                        <div id="casesContainer" class="space-y-4">
-                            <!-- Cases will be dynamically generated -->
-                        </div>
-                        
-                        <button id="addCaseBtn" class="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-md text-sm">
-                            <i class="fas fa-plus mr-2"></i>Agregar Caso
-                        </button>
-                    </div>
-
-                    <!-- Contact Section -->
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 mb-4">
-                            <i class="fas fa-envelope mr-2 text-red-600"></i>Información de Contacto
-                        </h2>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Formspree Form ID</label>
-                                <input type="text" id="formspreeId" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ejemplo: xzbqwrxy">
-                                <p class="text-xs text-gray-600 mt-1">ID de tu formulario en Formspree</p>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título Contacto (ES)</label>
-                                    <input type="text" id="contactTitleEs" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Conversemos">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título Contacto (EN)</label>
-                                    <input type="text" id="contactTitleEn" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="Let's Talk">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Preview Panel -->
-                <div class="lg:sticky lg:top-8">
-                    <div class="bg-white rounded-lg shadow-sm border">
-                        <div class="border-b px-6 py-4">
-                            <h3 class="text-lg font-semibold text-gray-900">
-                                <i class="fas fa-eye mr-2 text-blue-600"></i>Vista Previa
-                            </h3>
-                            <div class="flex items-center space-x-2 mt-2">
-                                <button id="previewEs" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Español</button>
-                                <button id="previewEn" class="bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm">English</button>
-                            </div>
-                        </div>
-                        
-                        <div id="previewContent" class="p-6 max-h-96 overflow-y-auto">
-                            <div class="text-center">
-                                <h1 class="text-3xl font-bold mb-2">Francisco Medina</h1>
-                                <p class="text-gray-600 mb-4">Senior Copywriter - Director Creativo</p>
-                                <p class="text-lg">De redactor a director: Creatividad con visión estratégica</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Export Modal -->
-    <div id="exportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-hidden">
-                <div class="border-b px-6 py-4 flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-900">Código HTML Generado</h3>
-                    <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times"></i>
+                <div class="flex space-x-4">
+                    <button onclick="saveChanges()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition duration-200">
+                        <i class="fas fa-save mr-2"></i>Guardar Cambios
+                    </button>
+                    <button onclick="exportHTML()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
+                        <i class="fas fa-download mr-2"></i>Exportar HTML
                     </button>
                 </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <p class="text-sm text-gray-600">Copia este código y reemplaza tu archivo index.html en GitHub</p>
-                        <button id="copyCodeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">
-                            <i class="fas fa-copy mr-2"></i>Copiar Código
-                        </button>
+            </div>
+            <div id="savedIndicator" class="saved-indicator mt-4 p-3 bg-green-100 text-green-800 rounded-lg">
+                <i class="fas fa-check-circle mr-2"></i>Cambios guardados correctamente
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Editor Panel -->
+            <div class="space-y-6">
+                <!-- Información Personal -->
+                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-user text-indigo-600 mr-2"></i>Información Personal
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Principal</label>
+                            <input type="text" id="mainName" value="Francisco Medina" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (ES)</label>
+                                <input type="text" id="subtitleES" value="Senior Copywriter - Director Creativo"
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subtítulo (EN)</label>
+                                <input type="text" id="subtitleEN" value="Senior Copywriter - Creative Director"
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (ES)</label>
+                                <textarea id="taglineES" rows="2" 
+                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">De redactor a director: Creatividad con visión estratégica</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tagline (EN)</label>
+                                <textarea id="taglineEN" rows="2"
+                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">From copywriter to director: Creativity with strategic vision</textarea>
+                            </div>
+                        </div>
                     </div>
-                    <textarea id="exportedCode" class="w-full h-96 px-3 py-2 border border-gray-300 rounded-md text-xs font-mono" readonly></textarea>
+                </div>
+
+                <!-- La Evolución -->
+                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-chart-line text-green-600 mr-2"></i>La Evolución (3 Actos)
+                    </h2>
+                    
+                    <div id="evolutionEditor" class="space-y-6">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Acto 1: El Redactor (2009-2012)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="act1TitleES" value="El Redactor"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="act1TitleEN" value="The Copywriter"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
+                                    <textarea id="act1DescES" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
+                                    <textarea id="act1DescEN" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Acto 2: El Estratega (2013-2016)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="act2TitleES" value="El Estratega"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="act2TitleEN" value="The Strategist"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
+                                    <textarea id="act2DescES" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
+                                    <textarea id="act2DescEN" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Acto 3: El Director (2016-presente)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="act3TitleES" value="El Director"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="act3TitleEN" value="The Director"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (ES)</label>
+                                    <textarea id="act3DescES" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (EN)</label>
+                                    <textarea id="act3DescEN" rows="3"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servicios -->
+                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-cogs text-orange-600 mr-2"></i>Servicios
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- Servicio 1 -->
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 1</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="service1TitleES" value="Dirección Creativa"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="service1TitleEN" value="Creative Direction"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
+                                    <textarea id="service1ItemsES" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Desarrollo de conceptos que venden
+Liderazgo de equipos creativos
+Supervisión de campañas 360°</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
+                                    <textarea id="service1ItemsEN" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Development of concepts that sell
+Creative team leadership
+360° campaign supervision</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Servicio 2 -->
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 2</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="service2TitleES" value="Estrategia Digital"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="service2TitleEN" value="Digital Strategy"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
+                                    <textarea id="service2ItemsES" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Meta Ads strategy
+Social media strategy
+Performance creative</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
+                                    <textarea id="service2ItemsEN" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Meta Ads strategy
+Social media strategy
+Performance creative</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Servicio 3 -->
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">Servicio 3</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (ES)</label>
+                                    <input type="text" id="service3TitleES" value="Consultoría"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Título (EN)</label>
+                                    <input type="text" id="service3TitleEN" value="Consulting"
+                                           class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (ES) - uno por línea</label>
+                                    <textarea id="service3ItemsES" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Auditorías creativas
+Restructuración de equipos
+Procesos creativos eficientes</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Items (EN) - uno por línea</label>
+                                    <textarea id="service3ItemsEN" rows="4"
+                                              class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">Creative audits
+Team restructuring
+Efficient creative processes</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración del Formulario -->
+                <div class="bg-white rounded-lg shadow-md p-6 editor-section">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-envelope text-red-600 mr-2"></i>Configuración del Formulario
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Form ID de Formspree</label>
+                            <input type="text" id="formspreeId" value="TU_FORM_ID" placeholder="ej: xzbqwrxy"
+                                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <p class="text-sm text-gray-600 mt-1">Obtén tu Form ID en <a href="https://formspree.io" class="text-blue-600 hover:underline" target="_blank">formspree.io</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-eye text-purple-600 mr-2"></i>Vista Previa
+                </h2>
+                
+                <div id="previewContainer" class="preview-container border-2 border-dashed border-gray-300 p-6 rounded-lg bg-gray-50 min-h-96">
+                    <div class="text-center">
+                        <h1 id="previewName" class="preview-title">Francisco Medina</h1>
+                        <p id="previewSubtitle" class="text-lg text-gray-600 mb-4">Senior Copywriter - Director Creativo</p>
+                        <p id="previewTagline" class="text-gray-700">De redactor a director: Creatividad con visión estratégica</p>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h2 class="text-2xl font-bold mb-6">La Evolución</h2>
+                        <div id="previewEvolution" class="space-y-6">
+                            <!-- Evolution content will be rendered here -->
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h2 class="text-2xl font-bold mb-6">Servicios</h2>
+                        <div id="previewServices" class="space-y-6">
+                            <!-- Services content will be rendered here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Data structure to hold all content
-        let portfolioData = {
-            personal: {
-                fullName: 'Francisco Medina',
-                subtitle: {
-                    es: 'Senior Copywriter - Director Creativo',
-                    en: 'Senior Copywriter - Creative Director'
-                },
-                tagline: {
-                    es: 'De redactor a director: Creatividad con visión estratégica',
-                    en: 'From copywriter to director: Creativity with strategic vision'
-                }
-            },
-            evolution: [
-                {
-                    number: '01',
-                    title: { es: 'El Redactor', en: 'The Copywriter' },
-                    period: '2009-2012',
-                    description: {
-                        es: 'Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.',
-                        en: 'I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.'
-                    }
-                },
-                {
-                    number: '02',
-                    title: { es: 'El Estratega', en: 'The Strategist' },
-                    period: '2013-2016',
-                    description: {
-                        es: 'Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.',
-                        en: 'Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.'
-                    }
-                },
-                {
-                    number: '03',
-                    title: { es: 'El Director', en: 'The Director' },
-                    period: '2016-presente',
-                    description: {
-                        es: 'Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.',
-                        en: 'Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.'
-                    }
-                }
-            ],
-            services: [
-                {
-                    title: { es: 'Dirección Creativa', en: 'Creative Direction' },
-                    items: [
-                        { es: 'Desarrollo de conceptos que venden', en: 'Development of concepts that sell' },
-                        { es: 'Liderazgo de equipos creativos', en: 'Creative team leadership' },
-                        { es: 'Supervisión de campañas 360°', en: '360° campaign supervision' }
-                    ]
-                },
-                {
-                    title: { es: 'Estrategia Digital', en: 'Digital Strategy' },
-                    items: [
-                        { es: 'Meta Ads strategy', en: 'Meta Ads strategy' },
-                        { es: 'Social media strategy', en: 'Social media strategy' },
-                        { es: 'Performance creative', en: 'Performance creative' }
-                    ]
-                },
-                {
-                    title: { es: 'Consultoría', en: 'Consulting' },
-                    items: [
-                        { es: 'Auditorías creativas', en: 'Creative audits' },
-                        { es: 'Restructuración de equipos', en: 'Team restructuring' },
-                        { es: 'Procesos creativos eficientes', en: 'Efficient creative processes' }
-                    ]
-                }
-            ],
-            cases: [
-                {
-                    title: { es: 'Cencosud Digital', en: 'Cencosud Digital' },
-                    description: {
-                        es: 'Lideré el equipo creativo digital para las cuentas de Jumbo, Santa Isabel y Retail Financiero Cencosud, desarrollando campañas digitales que cumplan objetivos comerciales de manera creativa.',
-                        en: 'Led the digital creative team for Jumbo, Santa Isabel and Cencosud Financial Retail accounts, developing digital campaigns that met commercial objectives creatively.'
-                    },
-                    result: {
-                        es: 'Resultado: Campañas digitales exitosas para el grupo retail más grande de Chile',
-                        en: 'Result: Successful digital campaigns for Chile\'s largest retail group'
-                    }
-                },
-                {
-                    title: { es: 'Advertising Not Dead', en: 'Advertising Not Dead' },
-                    description: {
-                        es: 'Como Director Creativo desde 2016, he desarrollado estrategias creativas innovadoras que han posicionado a la agencia como referente en creatividad publicitaria.',
-                        en: 'As Creative Director since 2016, I have developed innovative creative strategies that have positioned the agency as a reference in advertising creativity.'
-                    },
-                    result: {
-                        es: 'Resultado: 8+ años de liderazgo creativo exitoso',
-                        en: 'Result: 8+ years of successful creative leadership'
-                    }
-                },
-                {
-                    title: { es: 'SientoCuarenta', en: 'SientoCuarenta' },
-                    description: {
-                        es: 'Colectivo creativo propio que llevó el ingenio chileno de Twitter más allá de la plataforma, creando un libro de tuits ilustrados y una revista del medio.',
-                        en: 'Own creative collective that took Chilean wit from Twitter beyond the platform, creating an illustrated tweet book and a media magazine.'
-                    },
-                    result: {
-                        es: 'Resultado: Proyecto creativo independiente exitoso 2012-2014',
-                        en: 'Result: Successful independent creative project 2012-2014'
-                    }
-                }
-            ],
-            contact: {
-                formspreeId: '',
-                title: { es: 'Conversemos', en: 'Let\'s Talk' }
-            }
-        };
+        // Content storage
+        let content = {};
 
-        let currentPreviewLang = 'es';
-
-        // Initialize the editor
-        function initializeEditor() {
-            loadPersonalInfo();
-            renderEvolution();
-            renderServices();
-            renderCases();
-            loadContactInfo();
+        // Initialize editor
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+            setupEventListeners();
             updatePreview();
-            bindEvents();
-        }
+        });
 
-        function loadPersonalInfo() {
-            document.getElementById('fullName').value = portfolioData.personal.fullName;
-            document.getElementById('subtitleEs').value = portfolioData.personal.subtitle.es;
-            document.getElementById('subtitleEn').value = portfolioData.personal.subtitle.en;
-            document.getElementById('taglineEs').value = portfolioData.personal.tagline.es;
-            document.getElementById('taglineEn').value = portfolioData.personal.tagline.en;
-        }
-
-        function loadContactInfo() {
-            document.getElementById('formspreeId').value = portfolioData.contact.formspreeId;
-            document.getElementById('contactTitleEs').value = portfolioData.contact.title.es;
-            document.getElementById('contactTitleEn').value = portfolioData.contact.title.en;
-        }
-
-        function renderEvolution() {
-            const container = document.getElementById('evolutionContainer');
-            container.innerHTML = '';
-            
-            portfolioData.evolution.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'border border-gray-200 rounded-lg p-4';
-                div.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-medium text-gray-900">Acto ${item.number}</span>
-                        <button onclick="removeEvolution(${index})" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" placeholder="Título (ES)" value="${item.title.es}" 
-                               onchange="updateEvolution(${index}, 'title', 'es', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                        <input type="text" placeholder="Título (EN)" value="${item.title.en}" 
-                               onchange="updateEvolution(${index}, 'title', 'en', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                    </div>
-                    <input type="text" placeholder="Período" value="${item.period}" 
-                           onchange="updateEvolution(${index}, 'period', null, this.value)" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded text-sm mt-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                        <textarea placeholder="Descripción (ES)" rows="3" 
-                                  onchange="updateEvolution(${index}, 'description', 'es', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${item.description.es}</textarea>
-                        <textarea placeholder="Descripción (EN)" rows="3" 
-                                  onchange="updateEvolution(${index}, 'description', 'en', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${item.description.en}</textarea>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderServices() {
-            const container = document.getElementById('servicesContainer');
-            container.innerHTML = '';
-            
-            portfolioData.services.forEach((service, index) => {
-                const div = document.createElement('div');
-                div.className = 'border border-gray-200 rounded-lg p-4';
-                div.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-medium text-gray-900">Servicio ${index + 1}</span>
-                        <button onclick="removeService(${index})" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <input type="text" placeholder="Título (ES)" value="${service.title.es}" 
-                               onchange="updateService(${index}, 'title', 'es', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                        <input type="text" placeholder="Título (EN)" value="${service.title.en}" 
-                               onchange="updateService(${index}, 'title', 'en', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                    </div>
-                    <div id="serviceItems${index}" class="space-y-2">
-                        ${service.items.map((item, itemIndex) => `
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <input type="text" placeholder="Item (ES)" value="${item.es}" 
-                                       onchange="updateServiceItem(${index}, ${itemIndex}, 'es', this.value)" 
-                                       class="px-3 py-2 border border-gray-300 rounded text-sm">
-                                <div class="flex">
-                                    <input type="text" placeholder="Item (EN)" value="${item.en}" 
-                                           onchange="updateServiceItem(${index}, ${itemIndex}, 'en', this.value)" 
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-l text-sm">
-                                    <button onclick="removeServiceItem(${index}, ${itemIndex})" 
-                                            class="px-3 py-2 bg-red-600 text-white rounded-r text-sm">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <button onclick="addServiceItem(${index})" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                        <i class="fas fa-plus mr-1"></i>Agregar Item
-                    </button>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function renderCases() {
-            const container = document.getElementById('casesContainer');
-            container.innerHTML = '';
-            
-            portfolioData.cases.forEach((caseItem, index) => {
-                const div = document.createElement('div');
-                div.className = 'border border-gray-200 rounded-lg p-4';
-                div.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-medium text-gray-900">Caso ${index + 1}</span>
-                        <button onclick="removeCase(${index})" class="text-red-600 hover:text-red-800">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <input type="text" placeholder="Título (ES)" value="${caseItem.title.es}" 
-                               onchange="updateCase(${index}, 'title', 'es', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                        <input type="text" placeholder="Título (EN)" value="${caseItem.title.en}" 
-                               onchange="updateCase(${index}, 'title', 'en', this.value)" 
-                               class="px-3 py-2 border border-gray-300 rounded text-sm">
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <textarea placeholder="Descripción (ES)" rows="3" 
-                                  onchange="updateCase(${index}, 'description', 'es', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${caseItem.description.es}</textarea>
-                        <textarea placeholder="Descripción (EN)" rows="3" 
-                                  onchange="updateCase(${index}, 'description', 'en', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${caseItem.description.en}</textarea>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <textarea placeholder="Resultado (ES)" rows="2" 
-                                  onchange="updateCase(${index}, 'result', 'es', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${caseItem.result.es}</textarea>
-                        <textarea placeholder="Resultado (EN)" rows="2" 
-                                  onchange="updateCase(${index}, 'result', 'en', this.value)" 
-                                  class="px-3 py-2 border border-gray-300 rounded text-sm">${caseItem.result.en}</textarea>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function updatePersonalInfo() {
-            portfolioData.personal.fullName = document.getElementById('fullName').value;
-            portfolioData.personal.subtitle.es = document.getElementById('subtitleEs').value;
-            portfolioData.personal.subtitle.en = document.getElementById('subtitleEn').value;
-            portfolioData.personal.tagline.es = document.getElementById('taglineEs').value;
-            portfolioData.personal.tagline.en = document.getElementById('taglineEn').value;
-            updatePreview();
-        }
-
-        function updateContactInfo() {
-            portfolioData.contact.formspreeId = document.getElementById('formspreeId').value;
-            portfolioData.contact.title.es = document.getElementById('contactTitleEs').value;
-            portfolioData.contact.title.en = document.getElementById('contactTitleEn').value;
-            updatePreview();
-        }
-
-        function updateEvolution(index, field, lang, value) {
-            if (lang) {
-                portfolioData.evolution[index][field][lang] = value;
+        // Load content from localStorage or defaults
+        function loadContent() {
+            const savedContent = localStorage.getItem('franciscoPortfolioContent');
+            if (savedContent) {
+                content = JSON.parse(savedContent);
+                populateFields();
             } else {
-                portfolioData.evolution[index][field] = value;
+                loadDefaults();
             }
-            updatePreview();
         }
 
-        function updateService(index, field, lang, value) {
-            portfolioData.services[index][field][lang] = value;
-            updatePreview();
-        }
-
-        function updateServiceItem(serviceIndex, itemIndex, lang, value) {
-            portfolioData.services[serviceIndex].items[itemIndex][lang] = value;
-            updatePreview();
-        }
-
-        function updateCase(index, field, lang, value) {
-            portfolioData.cases[index][field][lang] = value;
-            updatePreview();
-        }
-
-        function addEvolution() {
-            const newEvolution = {
-                number: String(portfolioData.evolution.length + 1).padStart(2, '0'),
-                title: { es: '', en: '' },
-                period: '',
-                description: { es: '', en: '' }
+        // Load default content
+        function loadDefaults() {
+            content = {
+                mainName: 'Francisco Medina',
+                subtitleES: 'Senior Copywriter - Director Creativo',
+                subtitleEN: 'Senior Copywriter - Creative Director',
+                taglineES: 'De redactor a director: Creatividad con visión estratégica',
+                taglineEN: 'From copywriter to director: Creativity with strategic vision',
+                evolution: {
+                    act1: {
+                        titleES: 'El Redactor',
+                        titleEN: 'The Copywriter',
+                        descES: 'Nací laboralmente como redactor publicitario. Aprendiendo el oficio, desarrollando la voz y entendiendo cómo las palabras pueden mover audiencias.',
+                        descEN: 'I was born professionally as an advertising copywriter. Learning the craft, developing voice and understanding how words can move audiences.'
+                    },
+                    act2: {
+                        titleES: 'El Estratega',
+                        titleEN: 'The Strategist',
+                        descES: 'Mutando hacia el mundo digital, adquiriendo nuevos conocimientos que complementan la escritura. Entendiendo el negocio detrás de cada pieza creativa.',
+                        descEN: 'Evolving into the digital world, acquiring new knowledge that complements writing. Understanding the business behind every creative piece.'
+                    },
+                    act3: {
+                        titleES: 'El Director',
+                        titleEN: 'The Director',
+                        descES: 'Liderando equipos creativos, dirigiendo estrategias que funcionan. Las habilidades blandas se convirtieron en mi superpoder para hacer que las ideas cobren vida.',
+                        descEN: 'Leading creative teams, directing strategies that work. Soft skills became my superpower to bring ideas to life.'
+                    }
+                },
+                services: {
+                    service1: {
+                        titleES: 'Dirección Creativa',
+                        titleEN: 'Creative Direction',
+                        itemsES: ['Desarrollo de conceptos que venden', 'Liderazgo de equipos creativos', 'Supervisión de campañas 360°'],
+                        itemsEN: ['Development of concepts that sell', 'Creative team leadership', '360° campaign supervision']
+                    },
+                    service2: {
+                        titleES: 'Estrategia Digital',
+                        titleEN: 'Digital Strategy',
+                        itemsES: ['Meta Ads strategy', 'Social media strategy', 'Performance creative'],
+                        itemsEN: ['Meta Ads strategy', 'Social media strategy', 'Performance creative']
+                    },
+                    service3: {
+                        titleES: 'Consultoría',
+                        titleEN: 'Consulting',
+                        itemsES: ['Auditorías creativas', 'Restructuración de equipos', 'Procesos creativos eficientes'],
+                        itemsEN: ['Creative audits', 'Team restructuring', 'Efficient creative processes']
+                    }
+                },
+                formspreeId: 'TU_FORM_ID'
             };
-            portfolioData.evolution.push(newEvolution);
-            renderEvolution();
-            updatePreview();
         }
 
-        function removeEvolution(index) {
-            portfolioData.evolution.splice(index, 1);
-            // Renumber
-            portfolioData.evolution.forEach((item, i) => {
-                item.number = String(i + 1).padStart(2, '0');
+        // Populate form fields with content
+        function populateFields() {
+            document.getElementById('mainName').value = content.mainName || '';
+            document.getElementById('subtitleES').value = content.subtitleES || '';
+            document.getElementById('subtitleEN').value = content.subtitleEN || '';
+            document.getElementById('taglineES').value = content.taglineES || '';
+            document.getElementById('taglineEN').value = content.taglineEN || '';
+            document.getElementById('formspreeId').value = content.formspreeId || 'TU_FORM_ID';
+            
+            // Evolution
+            if (content.evolution) {
+                document.getElementById('act1TitleES').value = content.evolution.act1.titleES || '';
+                document.getElementById('act1TitleEN').value = content.evolution.act1.titleEN || '';
+                document.getElementById('act1DescES').value = content.evolution.act1.descES || '';
+                document.getElementById('act1DescEN').value = content.evolution.act1.descEN || '';
+                
+                document.getElementById('act2TitleES').value = content.evolution.act2.titleES || '';
+                document.getElementById('act2TitleEN').value = content.evolution.act2.titleEN || '';
+                document.getElementById('act2DescES').value = content.evolution.act2.descES || '';
+                document.getElementById('act2DescEN').value = content.evolution.act2.descEN || '';
+                
+                document.getElementById('act3TitleES').value = content.evolution.act3.titleES || '';
+                document.getElementById('act3TitleEN').value = content.evolution.act3.titleEN || '';
+                document.getElementById('act3DescES').value = content.evolution.act3.descES || '';
+                document.getElementById('act3DescEN').value = content.evolution.act3.descEN || '';
+            }
+            
+            // Services
+            if (content.services) {
+                document.getElementById('service1TitleES').value = content.services.service1.titleES || '';
+                document.getElementById('service1TitleEN').value = content.services.service1.titleEN || '';
+                document.getElementById('service1ItemsES').value = content.services.service1.itemsES?.join('\n') || '';
+                document.getElementById('service1ItemsEN').value = content.services.service1.itemsEN?.join('\n') || '';
+                
+                document.getElementById('service2TitleES').value = content.services.service2.titleES || '';
+                document.getElementById('service2TitleEN').value = content.services.service2.titleEN || '';
+                document.getElementById('service2ItemsES').value = content.services.service2.itemsES?.join('\n') || '';
+                document.getElementById('service2ItemsEN').value = content.services.service2.itemsEN?.join('\n') || '';
+                
+                document.getElementById('service3TitleES').value = content.services.service3.titleES || '';
+                document.getElementById('service3TitleEN').value = content.services.service3.titleEN || '';
+                document.getElementById('service3ItemsES').value = content.services.service3.itemsES?.join('\n') || '';
+                document.getElementById('service3ItemsEN').value = content.services.service3.itemsEN?.join('\n') || '';
+            }
+        }
+
+        // Setup event listeners for real-time preview
+        function setupEventListeners() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
             });
-            renderEvolution();
-            updatePreview();
         }
 
-        function addService() {
-            const newService = {
-                title: { es: '', en: '' },
-                items: [
-                    { es: '', en: '' }
-                ]
-            };
-            portfolioData.services.push(newService);
-            renderServices();
-            updatePreview();
-        }
-
-        function removeService(index) {
-            portfolioData.services.splice(index, 1);
-            renderServices();
-            updatePreview();
-        }
-
-        function addServiceItem(serviceIndex) {
-            portfolioData.services[serviceIndex].items.push({ es: '', en: '' });
-            renderServices();
-            updatePreview();
-        }
-
-        function removeServiceItem(serviceIndex, itemIndex) {
-            portfolioData.services[serviceIndex].items.splice(itemIndex, 1);
-            renderServices();
-            updatePreview();
-        }
-
-        function addCase() {
-            const newCase = {
-                title: { es: '', en: '' },
-                description: { es: '', en: '' },
-                result: { es: '', en: '' }
-            };
-            portfolioData.cases.push(newCase);
-            renderCases();
-            updatePreview();
-        }
-
-        function removeCase(index) {
-            portfolioData.cases.splice(index, 1);
-            renderCases();
-            updatePreview();
-        }
-
+        // Update preview
         function updatePreview() {
-            const lang = currentPreviewLang;
-            const previewContent = document.getElementById('previewContent');
+            // Update basic info
+            document.getElementById('previewName').textContent = document.getElementById('mainName').value;
+            document.getElementById('previewSubtitle').textContent = document.getElementById('subtitleES').value;
+            document.getElementById('previewTagline').textContent = document.getElementById('taglineES').value;
             
-            let evolutionHtml = portfolioData.evolution.map(item => `
-                <div class="mb-6">
-                    <div class="text-2xl font-light text-gray-400 mb-2">${item.number}</div>
-                    <h3 class="text-xl font-semibold mb-2">${item.title[lang]}</h3>
-                    <div class="text-sm text-gray-600 mb-2">${item.period}</div>
-                    <p class="text-gray-700">${item.description[lang]}</p>
-                </div>
-            `).join('');
-            
-            let servicesHtml = portfolioData.services.map(service => `
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-3 border-b-2 border-gray-900 pb-1">${service.title[lang]}</h3>
-                    <ul class="space-y-1">
-                        ${service.items.map(item => `<li class="text-gray-700">→ ${item[lang]}</li>`).join('')}
-                    </ul>
-                </div>
-            `).join('');
-            
-            let casesHtml = portfolioData.cases.map(caseItem => `
-                <div class="mb-6 pb-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold mb-2">${caseItem.title[lang]}</h3>
-                    <p class="text-gray-700 mb-2">${caseItem.description[lang]}</p>
-                    <p class="text-sm italic text-gray-600">${caseItem.result[lang]}</p>
-                </div>
-            `).join('');
-            
-            previewContent.innerHTML = `
-                <div class="text-center mb-8">
-                    <h1 class="text-3xl font-bold mb-2">${portfolioData.personal.fullName}</h1>
-                    <p class="text-gray-600 mb-4">${portfolioData.personal.subtitle[lang]}</p>
-                    <p class="text-lg">${portfolioData.personal.tagline[lang]}</p>
-                </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold mb-4">${lang === 'es' ? 'La Evolución' : 'The Evolution'}</h2>
-                    ${evolutionHtml}
-                </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold mb-4">${lang === 'es' ? 'Servicios' : 'Services'}</h2>
-                    ${servicesHtml}
-                </div>
-                
-                <div class="mb-8">
-                    <h2 class="text-2xl font-bold mb-4">${lang === 'es' ? 'Casos Destacados' : 'Featured Cases'}</h2>
-                    ${casesHtml}
-                </div>
-                
-                <div>
-                    <h2 class="text-2xl font-bold mb-4">${portfolioData.contact.title[lang]}</h2>
-                    <p class="text-gray-700">Formulario de contacto configurado con Formspree ID: ${portfolioData.contact.formspreeId || 'No configurado'}</p>
+            // Update evolution
+            const evolutionHtml = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-4xl font-light text-gray-400 mb-2">01</div>
+                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act1TitleES').value}</h3>
+                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2009-2012</div>
+                        <p class="text-gray-700">${document.getElementById('act1DescES').value}</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-light text-gray-400 mb-2">02</div>
+                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act2TitleES').value}</h3>
+                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2013-2016</div>
+                        <p class="text-gray-700">${document.getElementById('act2DescES').value}</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-light text-gray-400 mb-2">03</div>
+                        <h3 class="text-xl font-bold mb-2">${document.getElementById('act3TitleES').value}</h3>
+                        <div class="text-sm text-gray-600 mb-2 uppercase tracking-wide">2016-presente</div>
+                        <p class="text-gray-700">${document.getElementById('act3DescES').value}</p>
+                    </div>
                 </div>
             `;
+            document.getElementById('previewEvolution').innerHTML = evolutionHtml;
+            
+            // Update services
+            const service1Items = document.getElementById('service1ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
+            const service2Items = document.getElementById('service2ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
+            const service3Items = document.getElementById('service3ItemsES').value.split('\n').filter(item => item.trim()).map(item => `<li class="py-1">→ ${item}</li>`).join('');
+            
+            const servicesHtml = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service1TitleES').value}</h3>
+                        <ul class="list-none text-gray-700">${service1Items}</ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service2TitleES').value}</h3>
+                        <ul class="list-none text-gray-700">${service2Items}</ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold border-b-2 border-black pb-2 mb-4">${document.getElementById('service3TitleES').value}</h3>
+                        <ul class="list-none text-gray-700">${service3Items}</ul>
+                    </div>
+                </div>
+            `;
+            document.getElementById('previewServices').innerHTML = servicesHtml;
         }
 
-        function generateHTML() {
-            const formspreeAction = portfolioData.contact.formspreeId ? 
-                `https://formspree.io/f/${portfolioData.contact.formspreeId}` : 
-                'https://formspree.io/f/TU_FORM_ID';
-                
-            return `<!DOCTYPE html>
+        // Save changes
+        function saveChanges() {
+            // Collect all content
+            content = {
+                mainName: document.getElementById('mainName').value,
+                subtitleES: document.getElementById('subtitleES').value,
+                subtitleEN: document.getElementById('subtitleEN').value,
+                taglineES: document.getElementById('taglineES').value,
+                taglineEN: document.getElementById('taglineEN').value,
+                evolution: {
+                    act1: {
+                        titleES: document.getElementById('act1TitleES').value,
+                        titleEN: document.getElementById('act1TitleEN').value,
+                        descES: document.getElementById('act1DescES').value,
+                        descEN: document.getElementById('act1DescEN').value
+                    },
+                    act2: {
+                        titleES: document.getElementById('act2TitleES').value,
+                        titleEN: document.getElementById('act2TitleEN').value,
+                        descES: document.getElementById('act2DescES').value,
+                        descEN: document.getElementById('act2DescEN').value
+                    },
+                    act3: {
+                        titleES: document.getElementById('act3TitleES').value,
+                        titleEN: document.getElementById('act3TitleEN').value,
+                        descES: document.getElementById('act3DescES').value,
+                        descEN: document.getElementById('act3DescEN').value
+                    }
+                },
+                services: {
+                    service1: {
+                        titleES: document.getElementById('service1TitleES').value,
+                        titleEN: document.getElementById('service1TitleEN').value,
+                        itemsES: document.getElementById('service1ItemsES').value.split('\n').filter(item => item.trim()),
+                        itemsEN: document.getElementById('service1ItemsEN').value.split('\n').filter(item => item.trim())
+                    },
+                    service2: {
+                        titleES: document.getElementById('service2TitleES').value,
+                        titleEN: document.getElementById('service2TitleEN').value,
+                        itemsES: document.getElementById('service2ItemsES').value.split('\n').filter(item => item.trim()),
+                        itemsEN: document.getElementById('service2ItemsEN').value.split('\n').filter(item => item.trim())
+                    },
+                    service3: {
+                        titleES: document.getElementById('service3TitleES').value,
+                        titleEN: document.getElementById('service3TitleEN').value,
+                        itemsES: document.getElementById('service3ItemsES').value.split('\n').filter(item => item.trim()),
+                        itemsEN: document.getElementById('service3ItemsEN').value.split('\n').filter(item => item.trim())
+                    }
+                },
+                formspreeId: document.getElementById('formspreeId').value
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('franciscoPortfolioContent', JSON.stringify(content));
+            
+            // Show saved indicator
+            const indicator = document.getElementById('savedIndicator');
+            indicator.style.display = 'block';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+
+        // Export HTML
+        function exportHTML() {
+            const formspreeId = document.getElementById('formspreeId').value;
+            
+            const htmlTemplate = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${portfolioData.personal.fullName} - Director Creativo</title>
+    <title>${content.mainName} - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
@@ -793,28 +766,6 @@
             font-weight: bold;
         }
 
-        .cases-grid {
-            display: grid;
-            gap: 3rem;
-            margin: 3rem 0;
-        }
-
-        .case-item {
-            padding: 2rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .case-item:last-child {
-            border-bottom: none;
-        }
-
-        .case-result {
-            font-style: italic;
-            color: #666;
-            margin-top: 1rem;
-            font-size: 0.95rem;
-        }
-
         .contact-form {
             max-width: 600px;
             margin: 3rem auto 0;
@@ -872,6 +823,33 @@
             transform: translateY(-2px);
         }
 
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 0 1rem;
@@ -897,71 +875,81 @@
 <body>
     <button class="language-toggle" onclick="toggleLanguage()">EN</button>
 
+    <!-- HERO SECTION -->
     <section class="hero">
         <div class="container">
-            <h1 id="main-title">${portfolioData.personal.fullName}</h1>
-            <p class="subtitle" id="main-subtitle">${portfolioData.personal.subtitle.es}</p>
-            <p id="hero-tagline">${portfolioData.personal.tagline.es}</p>
+            <h1 id="main-title">${content.mainName}</h1>
+            <p class="subtitle" id="main-subtitle">${content.subtitleES}</p>
+            <p id="hero-tagline">${content.taglineES}</p>
         </div>
     </section>
 
+    <!-- EVOLUTION SECTION -->
     <section id="evolution-section">
         <div class="container">
             <h2 id="evolution-title">La Evolución</h2>
             
             <div class="evolution-grid">
-                ${portfolioData.evolution.map(item => `
-                    <div class="evolution-item">
-                        <div class="evolution-number">${item.number}</div>
-                        <h3 data-es="${item.title.es}" data-en="${item.title.en}">${item.title.es}</h3>
-                        <div class="evolution-period">${item.period}</div>
-                        <p data-es="${item.description.es}" data-en="${item.description.en}">${item.description.es}</p>
-                    </div>
-                `).join('')}
+                <div class="evolution-item">
+                    <div class="evolution-number">01</div>
+                    <h3 id="act1-title">${content.evolution.act1.titleES}</h3>
+                    <div class="evolution-period">2009-2012</div>
+                    <p id="act1-desc">${content.evolution.act1.descES}</p>
+                </div>
+                
+                <div class="evolution-item">
+                    <div class="evolution-number">02</div>
+                    <h3 id="act2-title">${content.evolution.act2.titleES}</h3>
+                    <div class="evolution-period">2013-2016</div>
+                    <p id="act2-desc">${content.evolution.act2.descES}</p>
+                </div>
+                
+                <div class="evolution-item">
+                    <div class="evolution-number">03</div>
+                    <h3 id="act3-title">${content.evolution.act3.titleES}</h3>
+                    <div class="evolution-period">2016-presente</div>
+                    <p id="act3-desc">${content.evolution.act3.descES}</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- SERVICES SECTION -->
     <section id="services-section">
         <div class="container">
             <h2 id="services-title">Servicios</h2>
             
             <div class="services-grid">
-                ${portfolioData.services.map(service => `
-                    <div class="service-item">
-                        <h3 data-es="${service.title.es}" data-en="${service.title.en}">${service.title.es}</h3>
-                        <ul>
-                            ${service.items.map(item => `
-                                <li data-es="${item.es}" data-en="${item.en}">${item.es}</li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `).join('')}
+                <div class="service-item">
+                    <h3 id="service1-title">${content.services.service1.titleES}</h3>
+                    <ul>
+                        ${content.services.service1.itemsES.map(item => `<li id="service1-item">${item}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="service-item">
+                    <h3 id="service2-title">${content.services.service2.titleES}</h3>
+                    <ul>
+                        ${content.services.service2.itemsES.map(item => `<li id="service2-item">${item}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="service-item">
+                    <h3 id="service3-title">${content.services.service3.titleES}</h3>
+                    <ul>
+                        ${content.services.service3.itemsES.map(item => `<li id="service3-item">${item}</li>`).join('')}
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="cases-section">
-        <div class="container">
-            <h2 id="cases-title">Casos Destacados</h2>
-            
-            <div class="cases-grid">
-                ${portfolioData.cases.map(caseItem => `
-                    <div class="case-item">
-                        <h3 data-es="${caseItem.title.es}" data-en="${caseItem.title.en}">${caseItem.title.es}</h3>
-                        <p data-es="${caseItem.description.es}" data-en="${caseItem.description.en}">${caseItem.description.es}</p>
-                        <p class="case-result" data-es="${caseItem.result.es}" data-en="${caseItem.result.en}">${caseItem.result.es}</p>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    </section>
-
+    <!-- CONTACT SECTION -->
     <section id="contact-section">
         <div class="container">
-            <h2 id="contact-title" data-es="${portfolioData.contact.title.es}" data-en="${portfolioData.contact.title.en}">${portfolioData.contact.title.es}</h2>
+            <h2 id="contact-title">Conversemos</h2>
             
-            <form class="contact-form" action="${formspreeAction}" method="POST">
+            <form class="contact-form" action="https://formspree.io/f/${formspreeId}" method="POST">
                 <div class="form-group">
                     <label for="name" id="label-name">Nombre completo</label>
                     <input type="text" id="name" name="name" required>
@@ -983,6 +971,8 @@
                 </div>
                 
                 <button type="submit" class="btn-submit" id="submit-btn">Enviar Mensaje</button>
+                
+                <div id="form-message" class="form-message"></div>
             </form>
         </div>
     </section>
@@ -992,12 +982,20 @@
         
         const translations = {
             es: {
-                'main-subtitle': '${portfolioData.personal.subtitle.es}',
-                'hero-tagline': '${portfolioData.personal.tagline.es}',
+                'main-subtitle': '${content.subtitleES}',
+                'hero-tagline': '${content.taglineES}',
                 'evolution-title': 'La Evolución',
+                'act1-title': '${content.evolution.act1.titleES}',
+                'act1-desc': '${content.evolution.act1.descES}',
+                'act2-title': '${content.evolution.act2.titleES}',
+                'act2-desc': '${content.evolution.act2.descES}',
+                'act3-title': '${content.evolution.act3.titleES}',
+                'act3-desc': '${content.evolution.act3.descES}',
                 'services-title': 'Servicios',
-                'cases-title': 'Casos Destacados',
-                'contact-title': '${portfolioData.contact.title.es}',
+                'service1-title': '${content.services.service1.titleES}',
+                'service2-title': '${content.services.service2.titleES}',
+                'service3-title': '${content.services.service3.titleES}',
+                'contact-title': 'Conversemos',
                 'label-name': 'Nombre completo',
                 'label-email': 'Email',
                 'label-phone': 'WhatsApp',
@@ -1005,12 +1003,20 @@
                 'submit-btn': 'Enviar Mensaje'
             },
             en: {
-                'main-subtitle': '${portfolioData.personal.subtitle.en}',
-                'hero-tagline': '${portfolioData.personal.tagline.en}',
+                'main-subtitle': '${content.subtitleEN}',
+                'hero-tagline': '${content.taglineEN}',
                 'evolution-title': 'The Evolution',
+                'act1-title': '${content.evolution.act1.titleEN}',
+                'act1-desc': '${content.evolution.act1.descEN}',
+                'act2-title': '${content.evolution.act2.titleEN}',
+                'act2-desc': '${content.evolution.act2.descEN}',
+                'act3-title': '${content.evolution.act3.titleEN}',
+                'act3-desc': '${content.evolution.act3.descEN}',
                 'services-title': 'Services',
-                'cases-title': 'Featured Cases',
-                'contact-title': '${portfolioData.contact.title.en}',
+                'service1-title': '${content.services.service1.titleEN}',
+                'service2-title': '${content.services.service2.titleEN}',
+                'service3-title': '${content.services.service3.titleEN}',
+                'contact-title': "Let's Talk",
                 'label-name': 'Full name',
                 'label-email': 'Email',
                 'label-phone': 'WhatsApp',
@@ -1032,80 +1038,34 @@
                 }
             });
             
-            document.querySelectorAll('[data-es][data-en]').forEach(element => {
-                element.textContent = element.getAttribute('data-' + newLang);
-            });
-            
             currentLang = newLang;
         }
+
+        // Form handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submit-btn');
+            const messageDiv = document.getElementById('form-message');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+            
+            // Let Formspree handle the form submission
+        });
     </script>
 </body>
 </html>`;
-        }
 
-        function bindEvents() {
-            // Personal info events
-            document.getElementById('fullName').addEventListener('input', updatePersonalInfo);
-            document.getElementById('subtitleEs').addEventListener('input', updatePersonalInfo);
-            document.getElementById('subtitleEn').addEventListener('input', updatePersonalInfo);
-            document.getElementById('taglineEs').addEventListener('input', updatePersonalInfo);
-            document.getElementById('taglineEn').addEventListener('input', updatePersonalInfo);
-            
-            // Contact info events
-            document.getElementById('formspreeId').addEventListener('input', updateContactInfo);
-            document.getElementById('contactTitleEs').addEventListener('input', updateContactInfo);
-            document.getElementById('contactTitleEn').addEventListener('input', updateContactInfo);
-            
-            // Button events
-            document.getElementById('addEvolutionBtn').addEventListener('click', addEvolution);
-            document.getElementById('addServiceBtn').addEventListener('click', addService);
-            document.getElementById('addCaseBtn').addEventListener('click', addCase);
-            
-            // Preview events
-            document.getElementById('previewEs').addEventListener('click', () => {
-                currentPreviewLang = 'es';
-                document.getElementById('previewEs').className = 'bg-blue-600 text-white px-3 py-1 rounded text-sm';
-                document.getElementById('previewEn').className = 'bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm';
-                updatePreview();
-            });
-            
-            document.getElementById('previewEn').addEventListener('click', () => {
-                currentPreviewLang = 'en';
-                document.getElementById('previewEn').className = 'bg-blue-600 text-white px-3 py-1 rounded text-sm';
-                document.getElementById('previewEs').className = 'bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm';
-                updatePreview();
-            });
-            
-            // Export events
-            document.getElementById('exportBtn').addEventListener('click', () => {
-                const html = generateHTML();
-                document.getElementById('exportedCode').value = html;
-                document.getElementById('exportModal').classList.remove('hidden');
-            });
-            
-            document.getElementById('closeModal').addEventListener('click', () => {
-                document.getElementById('exportModal').classList.add('hidden');
-            });
-            
-            document.getElementById('copyCodeBtn').addEventListener('click', () => {
-                const textarea = document.getElementById('exportedCode');
-                textarea.select();
-                document.execCommand('copy');
-                
-                const btn = document.getElementById('copyCodeBtn');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check mr-2"></i>¡Copiado!';
-                btn.className = 'bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.className = 'bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm';
-                }, 2000);
-            });
+            // Create download
+            const blob = new Blob([htmlTemplate], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'francisco-medina-portfolio.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', initializeEditor);
     </script>
 </body>
 </html>
