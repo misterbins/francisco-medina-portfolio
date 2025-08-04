@@ -474,7 +474,7 @@
 
             <div class="admin-section">
                 <h3>Información de Contacto</h3>
-                <input type="text" class="admin-input" id="formspreeId" placeholder="Formspree Form ID (ej: xzbqwrxy)">
+                <input type="text" class="admin-input" id="formspreeId" placeholder="xgvzlbvo">
             </div>
 
             <button class="admin-btn" onclick="saveContent()">Guardar Cambios</button>
@@ -718,7 +718,7 @@
                 ]
             },
             contact: {
-                formspreeId: "TU_FORM_ID"
+                formspreeId: "xgvzlbvo"
             }
         };
 
@@ -992,7 +992,7 @@
 
         function updateFormAction(formspreeId) {
             const form = document.getElementById('contactForm');
-            if (formspreeId && formspreeId !== 'TU_FORM_ID') {
+            if (formspreeId && formspreeId !== 'xgvzlbvo') {
                 form.action = `https://formspree.io/f/${formspreeId}`;
             }
         }
